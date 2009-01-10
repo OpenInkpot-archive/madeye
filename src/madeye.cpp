@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2008 by Marc Lajoie                                     *
- *   quickhand@openinkpot.org                                                         *
+ *   quickhand@openinkpot.org                                              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -36,14 +35,13 @@
 #include <GlobalParams.h>
 #include "keyhandler.h"
 #include "dialogs.h"
-#include "locopdf.h"
+#include "madeye.h"
 #include "database.h"
 #define REL_THEME "themes/themes_oitheme.edj"
 
 #define ROUND(f) (int)floor(f + 0.5)
 
 using namespace std;
-
 
 pthread_t thread;
 
@@ -75,49 +73,48 @@ int winheight=800;
  * Returns edje theme file name.
  */
  
-char *get_theme_file()
-{
+char *get_theme_file(void) {
  	//char *cwd = get_current_dir_name();
 	char *rel_theme;
-	asprintf(&rel_theme, "%s/%s", "/usr/share/locopdf", REL_THEME);
+	asprintf(&rel_theme, "%s/%s", "/usr/share/madeye", REL_THEME);
     //asprintf(&rel_theme, "%s/%s",cwd, REL_THEME);
 	//free(cwd);
 	return rel_theme;
 }
 
-int get_win_width()
-{
+int get_win_width(void) {
     return winwidth;    
 }
-int get_win_height()
-{
+
+int get_win_height(void) {
     return winheight;    
 }
-double get_zoom_inc()
-{
+
+double get_zoom_inc(void) {
     return zoominc;    
 }
-void set_zoom_inc(double newzoominc)
-{
+
+void set_zoom_inc(double newzoominc) {
     zoominc=newzoominc;    
 }
-double get_hpan_inc()
-{
+
+double get_hpan_inc(void) {
     return hpaninc;    
 }
-void set_hpan_inc(double newhpaninc)
-{
+
+void set_hpan_inc(double newhpaninc) {
     hpaninc=newhpaninc;    
 }
-double get_vpan_inc()
-{
+
+double get_vpan_inc(void) {
     return vpaninc;    
 }
-void set_vpan_inc(double newvpaninc)
-{
+
+void set_vpan_inc(double newvpaninc) {
     vpaninc=newvpaninc;    
 }
-int get_lefttrim()
+
+int get_lefttrim(void)
 {
     return lefttrim;    
 }
@@ -125,7 +122,7 @@ void set_lefttrim(int newlefttrim)
 {
     lefttrim=newlefttrim;    
 }
-int get_righttrim()
+int get_righttrim(void)
 {
     return righttrim;    
 }
@@ -133,7 +130,7 @@ void set_righttrim(int newrighttrim)
 {
     righttrim=newrighttrim;    
 }
-int get_toptrim()
+int get_toptrim(void)
 {
     return toptrim;    
 }
@@ -141,7 +138,7 @@ void set_toptrim(int newtoptrim)
 {
     toptrim=newtoptrim;    
 }
-int get_bottomtrim()
+int get_bottomtrim(void)
 {
     return bottomtrim;    
 }
@@ -149,7 +146,7 @@ void set_bottomtrim(int newbottomtrim)
 {
     bottomtrim=newbottomtrim;    
 }
-int get_fit_mode()
+int get_fit_mode(void)
 {
     return fitmode;    
 }
@@ -157,7 +154,7 @@ void set_fit_mode(int newfitmode)
 {
     fitmode=newfitmode;
 }
-int get_reader_mode()
+int get_reader_mode(void)
 {
     return readermode;    
 }
@@ -166,7 +163,7 @@ void set_reader_mode(int newreadermode)
     readermode=(newreadermode!=0);    
     
 }
-int get_antialias_mode()
+int get_antialias_mode(void)
 {
     return (globalParams->getAntialias() && globalParams->getVectorAntialias());
     
@@ -186,7 +183,7 @@ void set_antialias_mode(int newantialiasmode)
     }
     
 }
-int get_num_pages()
+int get_num_pages(void)
 {
     return numpages;
 }
@@ -197,11 +194,11 @@ void goto_page(int newpage)
     render_cur_page();
     prerender_next_page();
 }
-int get_cur_page()
+int get_cur_page(void)
 {
     return curpage;    
 }
-void render_cur_page()
+void render_cur_page(void)
 {
     char pdfobjstr[20];
     sprintf(pdfobjstr,"pdfobj%d",curpdfobj);    
@@ -370,7 +367,7 @@ void pan_cur_page(int panx,int pany)
         evas_object_move (pdfobj,x+panx,y+pany);
 }
 
-void reset_cur_panning()
+void reset_cur_panning(void)
 {
     Evas_Object *pdfobj;
     if(curpdfobj==1)
@@ -379,7 +376,7 @@ void reset_cur_panning()
         pdfobj=evas_object_name_find(evas,"pdfobj2"); 
     evas_object_move (pdfobj,0,0);    
 }
-void reset_next_panning()
+void reset_next_panning(void)
 {
     Evas_Object *pdfobj;
     if(curpdfobj==1)
@@ -388,7 +385,7 @@ void reset_next_panning()
         pdfobj=evas_object_name_find(evas,"pdfobj1"); 
     evas_object_move (pdfobj,0,0);    
 }
-void ensure_thread_dead()
+void ensure_thread_dead(void)
 {
     if(prerendering)
         pthread_join(thread, NULL);
@@ -396,25 +393,21 @@ void ensure_thread_dead()
 
 }
 
-void prerender_next_page()
-{
+void prerender_next_page(void) {
     ensure_thread_dead();
     prerendering=1;
     pthread_create(&thread, NULL, thread_func, NULL);
 }
 
 
-void flip_pages()
-{
+void flip_pages(void) {
     Evas_Object *active,*inactive;
-    if(curpdfobj==1)
-    {
+    if(curpdfobj==1) {
         active=evas_object_name_find(evas,"pdfobj1");
         inactive=evas_object_name_find(evas,"pdfobj2");
         curpdfobj=2;
     }
-    else
-    {
+    else {
         active=evas_object_name_find(evas,"pdfobj2");
         inactive=evas_object_name_find(evas,"pdfobj1");
         curpdfobj=1;
@@ -422,8 +415,8 @@ void flip_pages()
     evas_object_hide(active);
     evas_object_show(inactive);
 }
-void next_page()
-{
+
+void next_page(void) {
     if(curpage>=(numpages-1))
         return;
     curpage++;
@@ -432,11 +425,9 @@ void next_page()
     reset_next_panning();
     flip_pages();
     prerender_next_page();
-
-
 }
-void prev_page()
-{
+
+void prev_page(void) {
     if(curpage<=0)
         return;
     curpage--;
@@ -450,41 +441,33 @@ void prev_page()
 
 /* Main key handler */
 
-void main_esc(Evas *e, Evas_Object *obj)
-{
+void main_esc(Evas *e, Evas_Object *obj) {
     ecore_main_loop_quit();
 }
 
-void main_ok(Evas *e, Evas_Object *obj)
-{
+void main_ok(Evas *e, Evas_Object *obj) {
     Evas_Object *bgobj=evas_object_name_find(evas,"background");
     PreferencesDialog(evas,bgobj);
+}
+
+void main_shift(Evas *e, Evas_Object *obj) {
     
 }
 
-void main_shift(Evas *e, Evas_Object *obj)
-{
+void main_nav_up(Evas *e, Evas_Object *obj) {
     
 }
 
-void main_nav_up(Evas *e, Evas_Object *obj)
-{
+void main_nav_down(Evas *e, Evas_Object *obj) {
     
 }
 
-void main_nav_down(Evas *e, Evas_Object *obj)
-{
-    
-}
-
-void main_nav_left(Evas *e, Evas_Object *obj)
-{
+void main_nav_left(Evas *e, Evas_Object *obj) {
     
     prev_page();
 }
 
-void main_nav_right(Evas *e, Evas_Object *obj)
-{
+void main_nav_right(Evas *e, Evas_Object *obj) {
     if(readermode)
     {
         Evas_Object *pdfobj;
@@ -506,17 +489,17 @@ void main_nav_right(Evas *e, Evas_Object *obj)
         next_page();
 }
 
-void main_nav_sel(Evas *e, Evas_Object *obj)
-{
+void main_nav_sel(Evas *e, Evas_Object *obj) {
     
     
 }
-void main_nav_menubtn(Evas *e, Evas_Object *obj)
-{
+
+void main_nav_menubtn(Evas *e, Evas_Object *obj) {
     
     
     
 }
+
 void main_item(Evas *e, Evas_Object *obj,int index, bool lp)
 {
     //int paninc=5;
@@ -636,7 +619,7 @@ static key_handler_info_t main_info =
 
 void save_global_settings(char *filename)
 {
-    set_setting_INT(filename,"current_page",curpage);
+//    set_setting_INT(filename,"current_page",curpage);
     set_setting_DOUBLE(filename,"zoom_increment",zoominc);
     set_setting_DOUBLE(filename,"current_zoom",zoom);
     set_setting_DOUBLE(filename,"h_pan_increment",hpaninc);
@@ -652,9 +635,11 @@ void restore_global_settings(char *filename)
 {
     int temp11,temp12,temp13,temp14;
     double temp21,temp22,temp23,temp24;
+    /*
     temp11=get_setting_INT(filename,"current_page");
     if(temp11>=0)
         curpage=temp11;
+	*/
     
     
     temp21=get_setting_DOUBLE(filename,"zoom_increment");
@@ -717,14 +702,14 @@ int main(int argc, char *argv[])
     
     const char *homedir=getenv("HOME");
     char *settingsdir;
-    asprintf(&settingsdir,"%s/%s",homedir,".locopdf/");
+    asprintf(&settingsdir,"%s/%s",homedir,".madeye/");
     if(!ecore_file_path_dir_exists(settingsdir))
     {
         ecore_file_mkpath(settingsdir);
     }
     free(settingsdir);
     char *dbfile;
-    asprintf(&dbfile,"%s/%s",homedir,".locopdf/files.db");
+    asprintf(&dbfile,"%s/%s",homedir,".madeye/files.db");
     int dbres=init_database(dbfile);
     free(dbfile);
     if(dbres!=(-1))
@@ -735,7 +720,7 @@ int main(int argc, char *argv[])
     
     ecore_evas_borderless_set(ee, 0);
     ecore_evas_shaped_set(ee, 0);
-    ecore_evas_title_set(ee, "LoCoPDF");
+    ecore_evas_title_set(ee, "madEYE");
     ecore_evas_show(ee);
 
     /* get a pointer our new Evas canvas */
@@ -808,8 +793,7 @@ int main(int argc, char *argv[])
     ecore_main_loop_begin();
     
     /* when the main event loop exits, shutdown our libraries */
-    if(dbres!=(-1))
-    {
+    if(dbres!=(-1)) {
         save_global_settings(argv[1]);
         Evas_Object *pdfobj;
         if(curpdfobj==1)
@@ -826,14 +810,12 @@ int main(int argc, char *argv[])
     evas_object_del (o1);
     evas_object_del (o2);
     evas_object_del (bg);
-    epdf_page_delete (page);
-    epdf_document_delete (document);
-    
+    //epdf_page_delete (page);
+    //epdf_document_delete (document);
     
     edje_shutdown();
     ecore_evas_shutdown();
     ecore_shutdown();
     evas_shutdown();
-
 
 }
