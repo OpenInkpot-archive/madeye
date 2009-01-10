@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2008 by Marc Lajoie                                     *
- *   quickhand@openinkpot.org                                                         *
+ *   quickhand@openinkpot.org                                              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,15 +27,12 @@
 #include <cstdlib>
 #include <cstring>
 
-
 #include <Evas.h>
 #include <Ecore_Evas.h>
 #include <Edje.h>
 #include "keyhandler.h"
 #include "entrybox.h"
-#include "locopdf.h"
-
-
+#include "madeye.h"
 
 
 typedef struct _entry_info_struct {

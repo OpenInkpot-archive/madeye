@@ -6,21 +6,21 @@
 #include "database.h"
 
 
-static struct sqlite3 *locopdf_database=NULL;
+static struct sqlite3 *madeye_database=NULL;
 long get_file_index(char *filename,int create_entry_if_missing);
 
 
 int init_database(char *filename)
 {
-    int retval=sqlite3_open(filename,&locopdf_database);
+    int retval=sqlite3_open(filename,&madeye_database);
     if(retval!=SQLITE_OK)
     {
-        sqlite3_close(locopdf_database);
+        sqlite3_close(madeye_database);
         return -1;
     }
     //,cur_page INTEGER,zoominc REAL,curzoom REAL,hpaninc REAL,vpaninc REAL,curx INTEGER,cury INTEGER,left_trim INTEGER,right_trim INTEGER,top_trim INTEGER,bottom_trim INTEGER
-    sqlite3_exec(locopdf_database,"CREATE TABLE files(fileid INTEGER PRIMARY KEY,filename TEXT UNIQUE,mod_time INTEGER)",NULL,NULL,NULL);
-    sqlite3_exec(locopdf_database,"CREATE TABLE settings(fileid INTEGER,settingname TEXT,value TEXT)",NULL,NULL,NULL);
+    sqlite3_exec(madeye_database,"CREATE TABLE files(fileid INTEGER PRIMARY KEY,filename TEXT UNIQUE,mod_time INTEGER)",NULL,NULL,NULL);
+    sqlite3_exec(madeye_database,"CREATE TABLE settings(fileid INTEGER,settingname TEXT,value TEXT)",NULL,NULL,NULL);
     return 0;
 }
 
@@ -33,7 +33,7 @@ int get_file_record_status(char *filename)
     
     
     char *temp=sqlite3_mprintf("SELECT mod_time FROM files WHERE filename = \'%q\'",filename);
-    if(sqlite3_get_table(locopdf_database,temp,&resultp,&rows,&cols,NULL)!=SQLITE_OK)
+    if(sqlite3_get_table(madeye_database,temp,&resultp,&rows,&cols,NULL)!=SQLITE_OK)
     {
         sqlite3_free(temp);
         return RECORD_STATUS_ERROR;
@@ -85,7 +85,7 @@ int update_file_mod_time(char *filename)
     int rows,cols;
     
     char *temp=sqlite3_mprintf("SELECT mod_time FROM files WHERE filename = \'%q\'",filename);
-    if(sqlite3_get_table(locopdf_database,temp,&resultp,&rows,&cols,NULL)!=SQLITE_OK)
+    if(sqlite3_get_table(madeye_database,temp,&resultp,&rows,&cols,NULL)!=SQLITE_OK)
     {
         sqlite3_free(temp);
         sqlite3_free_table(resultp);    
@@ -99,14 +99,14 @@ int update_file_mod_time(char *filename)
     if(rows==0)
     {
         temp=sqlite3_mprintf("INSERT INTO files (filename,mod_time) VALUES(\'%q\',%d)",filename,filestat.st_mtime);
-        sqlite3_exec(locopdf_database,temp,NULL,NULL,NULL);
+        sqlite3_exec(madeye_database,temp,NULL,NULL,NULL);
         sqlite3_free(temp);
         
     }
     else
     {
         temp=sqlite3_mprintf("UPDATE files SET mod_time=%d WHERE filename=\'%q\'",filestat.st_mtime,filename);
-        sqlite3_exec(locopdf_database,temp,NULL,NULL,NULL);
+        sqlite3_exec(madeye_database,temp,NULL,NULL,NULL);
         sqlite3_free(temp);
     }
     sqlite3_free_table(resultp);
@@ -118,7 +118,7 @@ long get_file_index(char *filename,int create_entry_if_missing)
     char **resultp=NULL;
     int rows,cols;
     char *temp=sqlite3_mprintf("SELECT fileid FROM files WHERE filename = \'%q\'",filename);
-    int result= sqlite3_get_table(locopdf_database,temp,&resultp,&rows,&cols,NULL);
+    int result= sqlite3_get_table(madeye_database,temp,&resultp,&rows,&cols,NULL);
     sqlite3_free(temp);
     if(rows<=0 && create_entry_if_missing)
     {
@@ -132,10 +132,10 @@ long get_file_index(char *filename,int create_entry_if_missing)
         
         sqlite3_free_table(resultp);
         temp=sqlite3_mprintf("INSERT INTO files (filename,mod_time) VALUES(\'%q\',%d)",filename,filestat.st_mtime);
-        sqlite3_exec(locopdf_database,temp,NULL,NULL,NULL);
+        sqlite3_exec(madeye_database,temp,NULL,NULL,NULL);
         sqlite3_free(temp);
         char *temp=sqlite3_mprintf("SELECT fileid FROM files WHERE filename = \'%q\'",filename);
-        result= sqlite3_get_table(locopdf_database,temp,&resultp,&rows,&cols,NULL);
+        result= sqlite3_get_table(madeye_database,temp,&resultp,&rows,&cols,NULL);
         sqlite3_free(temp);
 
     }
@@ -155,7 +155,7 @@ int set_setting(char *filename,char *settingname,char *value)
     char **resultp=NULL;
     int rows,cols;
     char *temp=sqlite3_mprintf("SELECT value FROM settings WHERE fileid = %d AND settingname = \'%q\'",fileindex,settingname);
-    if(sqlite3_get_table(locopdf_database,temp,&resultp,&rows,&cols,NULL)!=SQLITE_OK)
+    if(sqlite3_get_table(madeye_database,temp,&resultp,&rows,&cols,NULL)!=SQLITE_OK)
     {
         sqlite3_free(temp);
         sqlite3_free_table(resultp);    
@@ -169,14 +169,14 @@ int set_setting(char *filename,char *settingname,char *value)
     if(rows==0)
     {
         temp=sqlite3_mprintf("INSERT INTO settings (fileid,settingname,value) VALUES(%d,\'%q\',\'%q\')",fileindex,settingname,value);
-        sqlite3_exec(locopdf_database,temp,NULL,NULL,NULL);
+        sqlite3_exec(madeye_database,temp,NULL,NULL,NULL);
         sqlite3_free(temp);
         
     }
     else
     {
         temp=sqlite3_mprintf("UPDATE settings SET value=\'%q\' WHERE fileid=%d AND settingname=\'%q\'",value,fileindex,settingname);
-        sqlite3_exec(locopdf_database,temp,NULL,NULL,NULL);
+        sqlite3_exec(madeye_database,temp,NULL,NULL,NULL);
         sqlite3_free(temp);
     }
     sqlite3_free_table(resultp);
@@ -209,7 +209,7 @@ char *get_setting(char *filename,char *settingname)
     char **resultp=NULL;
     int rows,cols;
     char *temp=sqlite3_mprintf("SELECT value FROM settings WHERE fileid = %d AND settingname = \'%q\'",fileindex,settingname);
-    int result= sqlite3_get_table(locopdf_database,temp,&resultp,&rows,&cols,NULL);
+    int result= sqlite3_get_table(madeye_database,temp,&resultp,&rows,&cols,NULL);
     sqlite3_free(temp);
     if(rows<=0)
     {
@@ -241,7 +241,7 @@ double get_setting_DOUBLE(char *filename,char *settingname)
 }
 void fini_database()
 {
-    sqlite3_close(locopdf_database);
-    locopdf_database=NULL;
+    sqlite3_close(madeye_database);
+    madeye_database=NULL;
 }
 

@@ -22,7 +22,7 @@
 #include "dialogs.h"
 #include "choicebox.h"
 #include "entrybox.h"
-#include "locopdf.h"
+#include "madeye.h"
 #include <iostream>
 #include <cstdlib>
 #include <cstring>

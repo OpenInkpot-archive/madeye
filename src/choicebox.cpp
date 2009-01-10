@@ -33,7 +33,7 @@
 #include <Edje.h>
 #include "keyhandler.h"
 #include "choicebox.h"
-#include "locopdf.h"
+#include "madeye.h"
 
 
 const int noptions = 8;
