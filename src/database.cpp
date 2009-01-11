@@ -61,13 +61,10 @@ int get_file_record_status(char *filename)
     if(fileexists<0)
         return RECORD_STATUS_EXISTS_BUT_UNKNOWN;
     
-    
-    
     if(table_modtime==filestat.st_mtime)
         return RECORD_STATUS_OK;    
     else
         return RECORD_STATUS_OUT_OF_DATE;
-    
     
 }
 
@@ -149,6 +146,7 @@ long get_file_index(char *filename,int create_entry_if_missing)
     sqlite3_free_table(resultp);
     return retval;
 }
+
 int set_setting(char *filename,char *settingname,char *value)
 {
     long fileindex=get_file_index(filename,1);
@@ -181,6 +179,7 @@ int set_setting(char *filename,char *settingname,char *value)
     }
     sqlite3_free_table(resultp);
 }
+
 int set_setting_INT(char *filename,char *settingname,int value)
 {
     char *tempstr;
@@ -189,6 +188,7 @@ int set_setting_INT(char *filename,char *settingname,int value)
     free(tempstr);
     return tempo;
 }
+
 int set_setting_DOUBLE(char *filename,char *settingname,double value)
 {
     char *tempstr;
@@ -199,6 +199,7 @@ int set_setting_DOUBLE(char *filename,char *settingname,double value)
     
     
 }
+
 char *get_setting(char *filename,char *settingname)
 {
     long fileindex=get_file_index(filename,0);
@@ -221,6 +222,7 @@ char *get_setting(char *filename,char *settingname)
     sqlite3_free_table(resultp);
     return retstr;    
 }
+
 int get_setting_INT(char *filename,char *settingname)
 {
     char *tempstr=get_setting(filename,settingname);
@@ -230,6 +232,7 @@ int get_setting_INT(char *filename,char *settingname)
     free(tempstr);
     return (int)tempo;    
 }
+
 double get_setting_DOUBLE(char *filename,char *settingname)
 {
     char *tempstr=get_setting(filename,settingname);
@@ -239,6 +242,7 @@ double get_setting_DOUBLE(char *filename,char *settingname)
     free(tempstr);
     return tempo;    
 }
+
 void fini_database()
 {
     sqlite3_close(madeye_database);

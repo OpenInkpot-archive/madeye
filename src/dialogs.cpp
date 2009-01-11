@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2008 by Marc Lajoie                                     *
- *   quickhand@openinkpot.org                                                         *
+ *   quickhand@openinkpot.org                                              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +41,7 @@ const char *OFF_ON_STRINGS[] = {
         
     
 Evas_Object *preferenceschoicebox,*zoomentrybox,*hpanentrybox,*vpanentrybox,*trimmingchoicebox,*lefttrimentrybox,*righttrimentrybox,*toptrimentrybox,*bottomtrimentrybox,*fitmodechoicebox,*gotopageentrybox;
+
 //hpan entrybox
 void goto_page_entryhandler(Evas *e, Evas_Object *obj,char *value)
 {
@@ -93,6 +94,7 @@ void HPanEntry(Evas *e, Evas_Object *obj,const char *startval)
     evas_object_move(hpanentrybox,(int)(((double)get_win_width()-w)/2.0),(int)(((double)get_win_height()-h)/2.0));
     
 }
+
 //vpan entrybox
 void vpan_entryhandler(Evas *e, Evas_Object *obj,char *value)
 {
@@ -120,6 +122,7 @@ void VPanEntry(Evas *e, Evas_Object *obj,const char *startval)
     evas_object_move(vpanentrybox,(int)(((double)get_win_width()-w)/2.0),(int)(((double)get_win_height()-h)/2.0));
     
 }
+
 //zoom entry box
 void zoom_entryhandler(Evas *e, Evas_Object *obj,char *value)
 {
@@ -173,6 +176,7 @@ void LeftTrimEntry(Evas *e, Evas_Object *obj,const char *startval)
     evas_object_move(lefttrimentrybox,(int)(((double)get_win_width()-w)/2.0),(int)(((double)get_win_height()-h)/2.0));
     
 }
+
 //right trimming entrybox
 void righttrim_entryhandler(Evas *e, Evas_Object *obj,char *value)
 {
@@ -198,6 +202,7 @@ void RightTrimEntry(Evas *e, Evas_Object *obj,const char *startval)
     evas_object_move(righttrimentrybox,(int)(((double)get_win_width()-w)/2.0),(int)(((double)get_win_height()-h)/2.0));
     
 }
+
 //top trimming entrybox
 void toptrim_entryhandler(Evas *e, Evas_Object *obj,char *value)
 {
@@ -223,6 +228,7 @@ void TopTrimEntry(Evas *e, Evas_Object *obj,const char *startval)
     evas_object_move(toptrimentrybox,(int)(((double)get_win_width()-w)/2.0),(int)(((double)get_win_height()-h)/2.0));
     
 }
+
 //bottom trimming entrybox
 void bottomtrim_entryhandler(Evas *e, Evas_Object *obj,char *value)
 {
@@ -248,8 +254,8 @@ void BottomTrimEntry(Evas *e, Evas_Object *obj,const char *startval)
     evas_object_move(bottomtrimentrybox,(int)(((double)get_win_width()-w)/2.0),(int)(((double)get_win_height()-h)/2.0));
     
 }
-// fitmode choicebox
 
+// fitmode choicebox
 void fitmode_choicehandler(Evas *e, Evas_Object *parent,int choice, bool lp)
 {
     if(get_fit_mode()!=choice)
@@ -271,7 +277,7 @@ void FitModeDialog(Evas *e, Evas_Object *obj)
 		"2. Fit Height",
 		"3. Best Fit",
 		"4. Stretch Fit",
-        "5. No Fit",
+	        "5. No Fit",
 	};
 
     
@@ -280,7 +286,7 @@ void FitModeDialog(Evas *e, Evas_Object *obj)
 		"",
 		"",
 		"",
-        "",
+       		"",
 	};
     
 	fitmodechoicebox=init_choicebox(e,initchoices, values, 5, fitmode_choicehandler, "Fit Mode Settings",obj, true);
@@ -290,8 +296,8 @@ void FitModeDialog(Evas *e, Evas_Object *obj)
     evas_object_move(fitmodechoicebox,(int)(((double)get_win_width()-w)/2.0),(int)(((double)get_win_height()-h)/2.0));
     
 }
-// trimming choicebox
 
+// trimming choicebox
 void trimming_choicehandler(Evas *e, Evas_Object *parent,int choice, bool lp)
 {
     if(choice==0)
@@ -361,8 +367,6 @@ void TrimmingDialog(Evas *e, Evas_Object *obj)
 }
 // Options dialogs
 
-
-
 void preferences_choicehandler(Evas *e, Evas_Object *parent,int choice, bool lp)
 {
     if(choice==0)
@@ -416,11 +420,10 @@ void PreferencesDialog(Evas *e, Evas_Object *obj)
 		"2. Ver. Panning",
 		"3. Trimming",
 		"4. Zoom Increment",
-        "5. Fit Mode",
-        "6. Antialias",
-        "7. Reader Mode",
+		"5. Fit Mode",
+		"6. Antialias",
+		"7. Reader Mode",
 	};
-    
     
     
 
@@ -450,6 +453,4 @@ void PreferencesDialog(Evas *e, Evas_Object *obj)
     free(hpan);
     free(vpan);
 }
-
-
 
