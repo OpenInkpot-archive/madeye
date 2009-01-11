@@ -31,11 +31,11 @@ int get_reader_mode(void);
 int get_antialias_mode(void);
 void set_antialias_mode(int newantialiasmode);
 void set_reader_mode(int newreadermode);
-int get_num_pages(void);
-void goto_page(int newpage);
-int get_cur_page(void);
+//int get_num_pages(void);
+//void goto_page(int newpage);
+//int get_cur_page(void);
 
-void render_cur_page(void);
-void prerender_next_page(void);
+void render_cur_image(void);
+//void prerender_next_page(void);
 void reset_cur_panning(void);
 #endif

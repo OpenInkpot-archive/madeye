@@ -202,8 +202,7 @@ int get_cur_page(void)
 }
 */
 
-void render_cur_image(void)
-{
+void render_cur_image(void) {
     char pdfobjstr[20];
     sprintf(pdfobjstr,"pdfobj%d",active_image);    
     Evas_Object *pdfobj=evas_object_name_find(evas,pdfobjstr);
@@ -444,7 +443,7 @@ void prev_page(void) {
         return;
     curpage--;
     reset_cur_panning();
-    render_cur_page();
+    render_cur_image();
     
     prerender_next_page();
 }
@@ -560,8 +559,8 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp)
             if(are_legal_coords(x,y,x+new_w,y+new_h))
             {
                 zoom-=zoominc;
-                render_cur_page();
-                prerender_next_page();
+                render_cur_image();
+                //prerender_next_page();
             }
         }
         
@@ -580,7 +579,7 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp)
         if(are_legal_coords(x,y,x+new_w,y+new_h))
         {
             zoom+=zoominc;
-            render_cur_page();
+            render_cur_image();
            // prerender_next_page();
         }
         
