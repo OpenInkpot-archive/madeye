@@ -786,9 +786,9 @@ int main(int argc, char *argv[]) {
     evas_object_show (o1);
     if(dbres!=(-1))
     {
-        int am=get_setting_INT(argv[1],"antialias");
-        if(am>=0)
-            set_antialias_mode(am);
+        //int am=get_setting_INT(argv[1],"antialias");
+        //if(am>=0)
+            //set_antialias_mode(am);
     }
     
     render_cur_image();
