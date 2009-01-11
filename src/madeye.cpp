@@ -1,6 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Marc Lajoie                                     *
+ *   Copyright (C) 2009 by Marc Lajoie, Tomasz Długosz                     *
  *   quickhand@openinkpot.org                                              *
+ *   tomek3dgmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -114,55 +115,55 @@ void set_vpan_inc(double newvpaninc) {
     vpaninc=newvpaninc;    
 }
 
-int get_lefttrim(void)
-{
+int get_lefttrim(void) {
     return lefttrim;    
 }
-void set_lefttrim(int newlefttrim)
-{
+
+void set_lefttrim(int newlefttrim) {
     lefttrim=newlefttrim;    
 }
-int get_righttrim(void)
-{
+
+int get_righttrim(void) {
     return righttrim;    
 }
-void set_righttrim(int newrighttrim)
-{
+
+void set_righttrim(int newrighttrim) {
     righttrim=newrighttrim;    
 }
-int get_toptrim(void)
-{
+
+int get_toptrim(void) {
     return toptrim;    
 }
-void set_toptrim(int newtoptrim)
-{
+
+void set_toptrim(int newtoptrim) {
     toptrim=newtoptrim;    
 }
-int get_bottomtrim(void)
-{
+
+int get_bottomtrim(void) {
     return bottomtrim;    
 }
-void set_bottomtrim(int newbottomtrim)
-{
+
+void set_bottomtrim(int newbottomtrim) {
     bottomtrim=newbottomtrim;    
 }
-int get_fit_mode(void)
-{
+
+int get_fit_mode(void) {
     return fitmode;    
 }
-void set_fit_mode(int newfitmode)
-{
+
+void set_fit_mode(int newfitmode) {
     fitmode=newfitmode;
 }
-int get_reader_mode(void)
-{
+
+int get_reader_mode(void) {
     return readermode;    
 }
-void set_reader_mode(int newreadermode)
-{
+
+void set_reader_mode(int newreadermode) {
     readermode=(newreadermode!=0);    
     
 }
+
 /*
 int get_antialias_mode(void)
 {
@@ -375,8 +376,7 @@ void pan_cur_page(int panx,int pany)
         evas_object_move (pdfobj,x+panx,y+pany);
 }
 
-void reset_cur_panning(void)
-{
+void reset_cur_panning(void) {
     Evas_Object *pdfobj;
     if(curpdfobj==1)
         pdfobj=evas_object_name_find(evas,"pdfobj1");
@@ -385,8 +385,7 @@ void reset_cur_panning(void)
     evas_object_move (pdfobj,0,0);    
 }
 
-void reset_next_panning(void)
-{
+void reset_next_panning(void) {
     Evas_Object *pdfobj;
     if(curpdfobj==1)
         pdfobj=evas_object_name_find(evas,"pdfobj2");
@@ -510,8 +509,6 @@ void main_nav_sel(Evas *e, Evas_Object *obj) {
 
 void main_nav_menubtn(Evas *e, Evas_Object *obj) {
     
-    
-    
 }
 
 void main_item(Evas *e, Evas_Object *obj,int index, bool lp)
@@ -631,8 +628,7 @@ static key_handler_info_t main_info =
     main_item
 };
 
-void save_global_settings(char *filename)
-{
+void save_global_settings(char *filename) {
 //    set_setting_INT(filename,"current_page",curpage);
     set_setting_DOUBLE(filename,"zoom_increment",zoominc);
     set_setting_DOUBLE(filename,"current_zoom",zoom);
@@ -645,8 +641,8 @@ void save_global_settings(char *filename)
     set_setting_INT(filename,"fit_mode",fitmode);
     set_setting_INT(filename,"reader_mode",readermode);
 }
-void restore_global_settings(char *filename)
-{
+
+void restore_global_settings(char *filename) {
     int temp11,temp12,temp13,temp14;
     double temp21,temp22,temp23,temp24;
     /*
@@ -696,8 +692,7 @@ void restore_global_settings(char *filename)
     }
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     Ecore_Evas *ee;
     
     Evas_Object *bg,*o1,*o2;
