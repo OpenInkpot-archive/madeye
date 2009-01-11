@@ -31,8 +31,8 @@
 #include <Ecore_File.h>
 #include <Ecore_Evas.h>
 #include <Edje.h>
-#include <epdf/Epdf.h>
-#include <GlobalParams.h>
+//#include <epdf/Epdf.h>
+//#include <GlobalParams.h>
 #include "keyhandler.h"
 #include "dialogs.h"
 #include "madeye.h"
@@ -41,19 +41,19 @@
 
 #define ROUND(f) (int)floor(f + 0.5)
 
-using namespace std;
+//using namespace std;
 
-pthread_t thread;
+//pthread_t thread;
 
 Evas *evas;
-Epdf_Document *document;
-Epdf_Page     *page;
+Epdf_Document *image;
+//Epdf_Page     *page;
 char          *filename;
 
-int numpages;
-int curpage=0;
+//int numpages;
+//int curpage=0;
 int curpdfobj=1;
-int prerendering=0;
+//int prerendering=0;
 int fitmode=FIT_WIDTH;
 int readermode=0;
 double zoom=1.0;
@@ -163,6 +163,7 @@ void set_reader_mode(int newreadermode)
     readermode=(newreadermode!=0);    
     
 }
+/*
 int get_antialias_mode(void)
 {
     return (globalParams->getAntialias() && globalParams->getVectorAntialias());
@@ -191,21 +192,23 @@ void goto_page(int newpage)
 {
     curpage=newpage;
     reset_cur_panning();
-    render_cur_page();
-    prerender_next_page();
+    render_cur_image();
+    //prerender_next_page();
 }
 int get_cur_page(void)
 {
     return curpage;    
 }
-void render_cur_page(void)
+*/
+
+void render_cur_image(void)
 {
     char pdfobjstr[20];
     sprintf(pdfobjstr,"pdfobj%d",curpdfobj);    
     Evas_Object *pdfobj=evas_object_name_find(evas,pdfobjstr);
-    epdf_page_page_set(page,curpage);
+    //epdf_page_page_set(page,curpage);
     int width,height;
-    epdf_page_size_get (page, &width, &height);
+    //epdf_page_size_get (page, &width, &height);
     double fitwidthzoom=((double)get_win_width())/((double)(width-lefttrim-righttrim))*zoom;
     double fitheightzoom=((double)get_win_height())/((double)(height-toptrim-bottomtrim))*zoom;
     
@@ -250,21 +253,23 @@ void render_cur_page(void)
         
     }
     
-    epdf_page_scale_set (page,scalex,scaley);
+    //epdf_page_scale_set (page,scalex,scaley);
     //epdf_page_scale_set (page,1.0,1.0);
     //epdf_page_scale_set(page,zoom,zoom);
     if(!lefttrim && !righttrim && !toptrim && !bottomtrim)
     {
-        epdf_page_render (page,pdfobj);
+        //epdf_page_render (page,pdfobj);
     }
     else
     {
-        epdf_page_render_slice (page,pdfobj,(int)(((double)lefttrim)*scalex),(int)(((double)toptrim)*scaley),(int)(((double)(width-lefttrim-righttrim))*scalex),(int)(((double)(height-toptrim-bottomtrim))*scaley));
+        //epdf_page_render_slice (page,pdfobj,(int)(((double)lefttrim)*scalex),(int)(((double)toptrim)*scaley),(int)(((double)(width-lefttrim-righttrim))*scalex),(int)(((double)(height-toptrim-bottomtrim))*scaley));
                              
         
     }
     //fprintf(stderr,"\nwidth=%d,height=%d,ltrim=%d,rtrim=%d,ttrim=%d,btrim=%d,fwzoom=%f,fhzoom=%f\n",width,height,lefttrim,righttrim,toptrim,bottomtrim,fitwidthzoom,fitheightzoom);
 }
+
+#if 0
 void *thread_func(void *vptr_args)
 {
     if(curpage>=(numpages-1))
@@ -322,7 +327,7 @@ void *thread_func(void *vptr_args)
         
     }
     
-    epdf_page_scale_set (page,scalex,scaley);
+    //epdf_page_scale_set (page,scalex,scaley);
     //epdf_page_scale_set (page,1.0,1.0);
     //epdf_page_scale_set(page,zoom,zoom);
     if(!lefttrim && !righttrim && !toptrim && !bottomtrim)
@@ -339,6 +344,8 @@ void *thread_func(void *vptr_args)
     return NULL;
 
 }
+#endif
+
 int are_legal_coords(int x1,int y1,int x2,int y2)
 {
     
@@ -352,6 +359,7 @@ int are_legal_coords(int x1,int y1,int x2,int y2)
     
     
 }
+
 void pan_cur_page(int panx,int pany)
 {
     Evas_Object *pdfobj;
@@ -376,6 +384,7 @@ void reset_cur_panning(void)
         pdfobj=evas_object_name_find(evas,"pdfobj2"); 
     evas_object_move (pdfobj,0,0);    
 }
+
 void reset_next_panning(void)
 {
     Evas_Object *pdfobj;
@@ -385,18 +394,21 @@ void reset_next_panning(void)
         pdfobj=evas_object_name_find(evas,"pdfobj1"); 
     evas_object_move (pdfobj,0,0);    
 }
+
 void ensure_thread_dead(void)
 {
+    /*
     if(prerendering)
         pthread_join(thread, NULL);
     prerendering=0;
+    */
 
 }
 
 void prerender_next_page(void) {
-    ensure_thread_dead();
-    prerendering=1;
-    pthread_create(&thread, NULL, thread_func, NULL);
+    //ensure_thread_dead();
+    //prerendering=1;
+    //pthread_create(&thread, NULL, thread_func, NULL);
 }
 
 
@@ -416,6 +428,7 @@ void flip_pages(void) {
     evas_object_show(inactive);
 }
 
+/*
 void next_page(void) {
     if(curpage>=(numpages-1))
         return;
@@ -436,6 +449,7 @@ void prev_page(void) {
     
     prerender_next_page();
 }
+*/
 
 /* GUI */
 
@@ -464,7 +478,7 @@ void main_nav_down(Evas *e, Evas_Object *obj) {
 
 void main_nav_left(Evas *e, Evas_Object *obj) {
     
-    prev_page();
+    //prev_page();
 }
 
 void main_nav_right(Evas *e, Evas_Object *obj) {
@@ -482,11 +496,11 @@ void main_nav_right(Evas *e, Evas_Object *obj) {
     
         if(are_legal_coords(x,y+pan_amt,x+w,y+h+pan_amt))
             pan_cur_page(0,pan_amt);
-        else
-            next_page();
+        //else
+            //next_page();
     }
-    else
-        next_page();
+    //else
+      //  next_page();
 }
 
 void main_nav_sel(Evas *e, Evas_Object *obj) {
@@ -570,13 +584,13 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp)
         {
             zoom+=zoominc;
             render_cur_page();
-            prerender_next_page();
+           // prerender_next_page();
         }
         
     }
     else if(index==9)
     {
-        prev_page();    
+        //prev_page();    
         
     }
     else if(index==0)
@@ -595,11 +609,11 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp)
     
             if(are_legal_coords(x,y+pan_amt,x+w,y+h+pan_amt))
                 pan_cur_page(0,pan_amt);
-            else
-                next_page();
+            //else
+              //  next_page();
         }
-        else
-            next_page();
+        //else
+          //  next_page();
     }
 }
 
@@ -694,10 +708,12 @@ int main(int argc, char *argv[])
     ecore_evas_init();
     edje_init();
     
+    /*
     if (!globalParams)
         globalParams = new GlobalParams();
     globalParams->setAntialias("yes");
     globalParams->setVectorAntialias("yes");
+    */
     /* setup database */
     
     const char *homedir=getenv("HOME");
@@ -717,7 +733,6 @@ int main(int argc, char *argv[])
     /* create our Ecore_Evas and show it */
     ee = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
     
-    
     ecore_evas_borderless_set(ee, 0);
     ecore_evas_shaped_set(ee, 0);
     ecore_evas_title_set(ee, "madEYE");
@@ -736,22 +751,19 @@ int main(int argc, char *argv[])
     set_key_handler(bg,&main_info);
     evas_object_show(bg);
     
-
-
     
     filename=argv[1];
-    document = epdf_document_new (argv[1]);
-    if (!document) {
+    image = epdf_document_new (argv[1]);
+    if (!image) {
     // manage error here
         fprintf(stderr,"Error Opening Document");
 
     }
-    numpages=epdf_document_page_count_get(document);
-    page = epdf_page_new (document);
-    if (!page) {
-    // manage error here
-        fprintf(stderr,"Error Processing Document");
-    }
+    //numpages=epdf_document_page_count_get(document);
+    //page = epdf_page_new (document);
+    //if (!page) {
+    //    fprintf(stderr,"Error Processing Document");
+    //}
     curpdfobj=1;
 
     o2 = evas_object_image_add (evas);
@@ -785,8 +797,8 @@ int main(int argc, char *argv[])
             set_antialias_mode(am);
     }
     
-    render_cur_page();
-    prerender_next_page();
+    render_cur_image();
+    //prerender_next_page();
     
 
     /* start the main event loop */
@@ -804,7 +816,7 @@ int main(int argc, char *argv[])
         evas_object_geometry_get(pdfobj,&x,&y,&w,&h);
         set_setting_INT(argv[1],"current_x",x);
         set_setting_INT(argv[1],"current_y",y);
-        set_setting_INT(argv[1],"antialias",get_antialias_mode());
+        //set_setting_INT(argv[1],"antialias",get_antialias_mode());
         fini_database();
     }
     evas_object_del (o1);
