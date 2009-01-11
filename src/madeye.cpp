@@ -47,13 +47,13 @@
 //pthread_t thread;
 
 Evas *evas;
-Epdf_Document *image;
+Evas_Object *image;
 //Epdf_Page     *page;
 char          *filename;
 
 //int numpages;
 //int curpage=0;
-int curpdfobj=1;
+bool active_image=1;
 //int prerendering=0;
 int fitmode=FIT_WIDTH;
 int readermode=0;
@@ -205,7 +205,7 @@ int get_cur_page(void)
 void render_cur_image(void)
 {
     char pdfobjstr[20];
-    sprintf(pdfobjstr,"pdfobj%d",curpdfobj);    
+    sprintf(pdfobjstr,"pdfobj%d",active_image);    
     Evas_Object *pdfobj=evas_object_name_find(evas,pdfobjstr);
     //epdf_page_page_set(page,curpage);
     int width,height;
@@ -277,7 +277,7 @@ void *thread_func(void *vptr_args)
         return NULL;
 
     Evas_Object *pdfobj;
-    if(curpdfobj==1)
+    if(active_image)
         pdfobj=evas_object_name_find(evas,"pdfobj2");
     else
         pdfobj=evas_object_name_find(evas,"pdfobj1");
@@ -364,7 +364,7 @@ int are_legal_coords(int x1,int y1,int x2,int y2)
 void pan_cur_page(int panx,int pany)
 {
     Evas_Object *pdfobj;
-    if(curpdfobj==1)
+    if(active_image)
         pdfobj=evas_object_name_find(evas,"pdfobj1");
     else
         pdfobj=evas_object_name_find(evas,"pdfobj2"); 
@@ -378,7 +378,7 @@ void pan_cur_page(int panx,int pany)
 
 void reset_cur_panning(void) {
     Evas_Object *pdfobj;
-    if(curpdfobj==1)
+    if(active_image)
         pdfobj=evas_object_name_find(evas,"pdfobj1");
     else
         pdfobj=evas_object_name_find(evas,"pdfobj2"); 
@@ -387,7 +387,7 @@ void reset_cur_panning(void) {
 
 void reset_next_panning(void) {
     Evas_Object *pdfobj;
-    if(curpdfobj==1)
+    if(active_image)
         pdfobj=evas_object_name_find(evas,"pdfobj2");
     else
         pdfobj=evas_object_name_find(evas,"pdfobj1"); 
@@ -413,15 +413,15 @@ void prerender_next_page(void) {
 
 void flip_pages(void) {
     Evas_Object *active,*inactive;
-    if(curpdfobj==1) {
+    if(active_image) {
         active=evas_object_name_find(evas,"pdfobj1");
         inactive=evas_object_name_find(evas,"pdfobj2");
-        curpdfobj=2;
+        active_image=2;
     }
     else {
         active=evas_object_name_find(evas,"pdfobj2");
         inactive=evas_object_name_find(evas,"pdfobj1");
-        curpdfobj=1;
+        active_image=1;
     }
     evas_object_hide(active);
     evas_object_show(inactive);
@@ -485,7 +485,7 @@ void main_nav_right(Evas *e, Evas_Object *obj) {
     {
         Evas_Object *pdfobj;
         int pan_amt=(-1)*ROUND(((double)get_win_height())*vpaninc);
-        if(curpdfobj==1)
+        if(active_image)
             pdfobj=evas_object_name_find(evas,"pdfobj1");
         else
             pdfobj=evas_object_name_find(evas,"pdfobj2"); 
@@ -549,7 +549,7 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp)
         if((zoom-zoominc)>0)
         {
             Evas_Object *pdfobj;
-            if(curpdfobj==1)
+            if(active_image)
                 pdfobj=evas_object_name_find(evas,"pdfobj1");
             else
                 pdfobj=evas_object_name_find(evas,"pdfobj2"); 
@@ -569,7 +569,7 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp)
     else if(index==8)
     {
         Evas_Object *pdfobj;
-        if(curpdfobj==1)
+        if(active_image)
             pdfobj=evas_object_name_find(evas,"pdfobj1");
         else
             pdfobj=evas_object_name_find(evas,"pdfobj2"); 
@@ -596,7 +596,7 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp)
         {
             Evas_Object *pdfobj;
             int pan_amt=(-1)*ROUND(((double)get_win_height())*vpaninc);
-            if(curpdfobj==1)
+            if(active_image)
                 pdfobj=evas_object_name_find(evas,"pdfobj1");
             else
                 pdfobj=evas_object_name_find(evas,"pdfobj2"); 
@@ -748,7 +748,7 @@ int main(int argc, char *argv[]) {
     
     
     filename=argv[1];
-    image = epdf_document_new (argv[1]);
+    evas_object_image_file_set(image, filename, NULL);
     if (!image) {
     // manage error here
         fprintf(stderr,"Error Opening Document");
@@ -759,7 +759,7 @@ int main(int argc, char *argv[]) {
     //if (!page) {
     //    fprintf(stderr,"Error Processing Document");
     //}
-    curpdfobj=1;
+    active_image=1;
 
     o2 = evas_object_image_add (evas);
     evas_object_move (o2, 0, 0);
@@ -803,7 +803,7 @@ int main(int argc, char *argv[]) {
     if(dbres!=(-1)) {
         save_global_settings(argv[1]);
         Evas_Object *pdfobj;
-        if(curpdfobj==1)
+        if(active_image)
             pdfobj=evas_object_name_find(evas,"pdfobj1");
         else
             pdfobj=evas_object_name_find(evas,"pdfobj2"); 
