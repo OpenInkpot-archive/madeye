@@ -405,9 +405,9 @@ void preferences_choicehandler(Evas *e, Evas_Object *parent,int choice, bool lp)
     }
     else if(choice==5)
     {
-        set_antialias_mode(!get_antialias_mode());
-        update_label(e,preferenceschoicebox,5,OFF_ON_STRINGS[get_antialias_mode()]);
-        render_cur_image();
+        //set_antialias_mode(!get_antialias_mode());
+        //update_label(e,preferenceschoicebox,5,OFF_ON_STRINGS[get_antialias_mode()]);
+        //render_cur_image();
         //prerender_next_page();
     }
     else if(choice==6)
@@ -425,7 +425,7 @@ void PreferencesDialog(Evas *e, Evas_Object *obj)
 		"3. Trimming",
 		"4. Zoom Increment",
 		"5. Fit Mode",
-		"6. Antialias",
+	//	"6. Antialias",
 		"7. Reader Mode",
 	};
     
@@ -444,11 +444,11 @@ void PreferencesDialog(Evas *e, Evas_Object *obj)
 		"",
 		zoom,
         FIT_STRINGS[get_fit_mode()],
-        OFF_ON_STRINGS[get_antialias_mode()],
+        //OFF_ON_STRINGS[get_antialias_mode()],
         OFF_ON_STRINGS[get_reader_mode()],
 	};
     
-	preferenceschoicebox=init_choicebox(e,initchoices, values, 7, preferences_choicehandler, "LoCoPDF Settings",obj, true);
+	preferenceschoicebox=init_choicebox(e,initchoices, values, 7, preferences_choicehandler, "madEYE Settings",obj, true);
     int x,y,w,h;
     evas_object_geometry_get(preferenceschoicebox,&x,&y,&w,&h);
     evas_object_move(preferenceschoicebox,(int)(((double)get_win_width()-w)/2.0),(int)(((double)get_win_height()-h)/2.0));
