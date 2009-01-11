@@ -32,7 +32,7 @@ const char *FIT_STRINGS[] = {
 		"Fit Height",
 		"Best Fit",
 		"Stretch Fit",
-        "No Fit",
+	        "No Fit",
 	};
 const char *OFF_ON_STRINGS[] = {
         "Off",
@@ -45,6 +45,7 @@ Evas_Object *preferenceschoicebox,*zoomentrybox,*hpanentrybox,*vpanentrybox,*tri
 //hpan entrybox
 void goto_page_entryhandler(Evas *e, Evas_Object *obj,char *value)
 {
+    /*
     if(value)
     {
         int numval=(int)strtol(value,NULL,10);
@@ -54,10 +55,12 @@ void goto_page_entryhandler(Evas *e, Evas_Object *obj,char *value)
         }
         free(value);
     }
+    */
 }
 
 void GotoPageEntry(Evas *e, Evas_Object *obj)
 {
+	/*
     char *tempstr;
     asprintf(&tempstr,"Page? (%d/%d)",get_cur_page()+1,get_num_pages());
     gotopageentrybox=init_entrybox(e,tempstr,"",4,goto_page_entryhandler,obj);
@@ -65,8 +68,9 @@ void GotoPageEntry(Evas *e, Evas_Object *obj)
     int x,y,w,h;
     evas_object_geometry_get(gotopageentrybox,&x,&y,&w,&h);
     evas_object_move(gotopageentrybox,(int)(((double)get_win_width()-w)/2.0),(int)(((double)get_win_height()-h)/2.0));
-    
+    */
 }
+
 //hpan entrybox
 void hpan_entryhandler(Evas *e, Evas_Object *obj,char *value)
 {
@@ -162,8 +166,8 @@ void lefttrim_entryhandler(Evas *e, Evas_Object *obj,char *value)
         update_label(e,trimmingchoicebox,0,tempo);
         free(tempo);
         free(value);
-        render_cur_page();
-        prerender_next_page();
+        render_cur_image();
+        //prerender_next_page();
     }
     
 }
@@ -189,8 +193,8 @@ void righttrim_entryhandler(Evas *e, Evas_Object *obj,char *value)
         update_label(e,trimmingchoicebox,1,tempo);
         free(tempo);
         free(value);
-        render_cur_page();
-        prerender_next_page();
+        render_cur_image();
+        //prerender_next_page();
     }
 }
 
@@ -215,8 +219,8 @@ void toptrim_entryhandler(Evas *e, Evas_Object *obj,char *value)
         update_label(e,trimmingchoicebox,2,tempo);
         free(tempo);
         free(value);
-        render_cur_page();
-        prerender_next_page();
+        render_cur_image();
+        //prerender_next_page();
     }
 }
 
@@ -241,8 +245,8 @@ void bottomtrim_entryhandler(Evas *e, Evas_Object *obj,char *value)
         update_label(e,trimmingchoicebox,3,tempo);
         free(tempo);
         free(value);
-        render_cur_page();
-        prerender_next_page();
+        render_cur_image();
+        //prerender_next_page();
     }
 }
 
@@ -265,8 +269,8 @@ void fitmode_choicehandler(Evas *e, Evas_Object *parent,int choice, bool lp)
         
         evas_object_focus_set(choicebox_get_parent(e,parent),1);
         fini_choicebox(e,parent,false);
-        render_cur_page();
-        prerender_next_page();
+        render_cur_image();
+        //prerender_next_page();
     }
 }
 
@@ -403,8 +407,8 @@ void preferences_choicehandler(Evas *e, Evas_Object *parent,int choice, bool lp)
     {
         set_antialias_mode(!get_antialias_mode());
         update_label(e,preferenceschoicebox,5,OFF_ON_STRINGS[get_antialias_mode()]);
-        render_cur_page();
-        prerender_next_page();
+        render_cur_image();
+        //prerender_next_page();
     }
     else if(choice==6)
     {
