@@ -425,7 +425,7 @@ void PreferencesDialog(Evas *e, Evas_Object *obj)
 		"3. Trimming",
 		"4. Zoom Increment",
 		"5. Fit Mode",
-	//	"6. Antialias",
+		"6. ---------",
 		"7. Reader Mode",
 	};
     

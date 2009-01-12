@@ -44,11 +44,11 @@
 
 Evas *evas;
 Evas_Object *image;
-char          *filename;
+//char          *filename;
 
 //int numpages;
 //int curpage=0;
-bool active_image=1;
+//bool active_image=1;
 //int prerendering=0;
 int fitmode=FIT_WIDTH;
 int readermode=0;
@@ -193,10 +193,16 @@ int get_cur_page(void)
 }
 */
 
-void render_cur_image(void) {
-    char pdfobjstr[20];
-    sprintf(pdfobjstr,"pdfobj%d",active_image);    
-    Evas_Object *pdfobj=evas_object_name_find(evas,pdfobjstr);
+void render_cur_image() {
+    Evas_Object *pdfobj=evas_object_name_find(evas,"image");
+	evas_object_move(image, 0, 0);
+    evas_object_resize(image, 100, 100);
+    evas_object_image_fill_set(image, 0, 0, 100, 100);
+    evas_object_show(image);
+
+#if 0
+    //sprintf(pdfobjstr,"pdfobj%d",active_image);    
+    //Evas_Object *pdfobj=evas_object_name_find(evas,pdfobjstr);
     //epdf_page_page_set(page,curpage);
     int width,height;
     //epdf_page_size_get (page, &width, &height);
@@ -257,6 +263,7 @@ void render_cur_image(void) {
         
     }
     //fprintf(stderr,"\nwidth=%d,height=%d,ltrim=%d,rtrim=%d,ttrim=%d,btrim=%d,fwzoom=%f,fhzoom=%f\n",width,height,lefttrim,righttrim,toptrim,bottomtrim,fitwidthzoom,fitheightzoom);
+#endif
 }
 
 #if 0
@@ -350,6 +357,7 @@ int are_legal_coords(int x1,int y1,int x2,int y2) {
 }
 
 void pan_cur_page(int panx,int pany) {
+	/*
     Evas_Object *pdfobj;
     if(active_image)
         pdfobj=evas_object_name_find(evas,"pdfobj1");
@@ -361,24 +369,29 @@ void pan_cur_page(int panx,int pany) {
     
     if(are_legal_coords(x+panx,y+pany,x+w+panx,y+h+pany))
         evas_object_move (pdfobj,x+panx,y+pany);
+	*/
 }
 
 void reset_cur_panning(void) {
+	/*
     Evas_Object *pdfobj;
     if(active_image)
         pdfobj=evas_object_name_find(evas,"pdfobj1");
     else
         pdfobj=evas_object_name_find(evas,"pdfobj2"); 
     evas_object_move (pdfobj,0,0);    
+	*/
 }
 
 void reset_next_panning(void) {
+	/*
     Evas_Object *pdfobj;
     if(active_image)
         pdfobj=evas_object_name_find(evas,"pdfobj2");
     else
         pdfobj=evas_object_name_find(evas,"pdfobj1"); 
     evas_object_move (pdfobj,0,0);    
+	*/
 }
 
 void ensure_thread_dead(void) {
@@ -398,6 +411,7 @@ void prerender_next_page(void) {
 
 
 void flip_pages(void) {
+	/*
     Evas_Object *active,*inactive;
     if(active_image) {
         active=evas_object_name_find(evas,"pdfobj1");
@@ -411,6 +425,7 @@ void flip_pages(void) {
     }
     evas_object_hide(active);
     evas_object_show(inactive);
+	*/
 }
 
 /*
@@ -467,6 +482,7 @@ void main_nav_left(Evas *e, Evas_Object *obj) {
 }
 
 void main_nav_right(Evas *e, Evas_Object *obj) {
+	/*
     if(readermode)
     {
         Evas_Object *pdfobj;
@@ -486,6 +502,7 @@ void main_nav_right(Evas *e, Evas_Object *obj) {
     }
     //else
       //  next_page();
+	*/
 }
 
 void main_nav_sel(Evas *e, Evas_Object *obj) {
@@ -531,6 +548,7 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp) {
     }
     else if(index==7)
     {
+		/*
         if((zoom-zoominc)>0)
         {
             Evas_Object *pdfobj;
@@ -549,10 +567,12 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp) {
                 //prerender_next_page();
             }
         }
+		*/
         
     }
     else if(index==8)
     {
+		/*
         Evas_Object *pdfobj;
         if(active_image)
             pdfobj=evas_object_name_find(evas,"pdfobj1");
@@ -568,6 +588,7 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp) {
             render_cur_image();
            // prerender_next_page();
         }
+		*/
         
     }
     else if(index==9)
@@ -577,6 +598,7 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp) {
     }
     else if(index==0)
     {
+		/*
         if(readermode)
         {
             Evas_Object *pdfobj;
@@ -596,6 +618,7 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp) {
         }
         //else
           //  next_page();
+		*/
     }
 }
 
@@ -680,7 +703,8 @@ void restore_global_settings(char *filename) {
 int main(int argc, char *argv[]) {
     Ecore_Evas *ee;
     
-    Evas_Object *bg,*o1,*o2;
+    Evas_Object *bg; //background
+	//Evas_Object *o1,*o2;
 
     /* initialize our libraries */
     evas_init();
@@ -729,6 +753,7 @@ int main(int argc, char *argv[]) {
     
     
     //filename=argv[1];
+	image = evas_object_image_add(evas);
     evas_object_image_file_set(image, argv[1], NULL);
     if (!image) {
     // manage error here
@@ -740,16 +765,17 @@ int main(int argc, char *argv[]) {
     //if (!page) {
     //    fprintf(stderr,"Error Processing Document");
     //}
-    active_image=1;
+    //active_image=1;
 
-    o2 = evas_object_image_add (evas);
-    evas_object_move (o2, 0, 0);
-    evas_object_name_set(o2, "pdfobj2");
+    //o2 = evas_object_image_add (evas);
+    //evas_object_move (o2, 0, 0);
+    //evas_object_name_set(o2, "pdfobj2");
     //evas_object_show (o2);
 
-    o1 = evas_object_image_add (evas);
+    //o1 = evas_object_image_add (evas);
     
     
+	/*
     char *temp11,*temp12;
     if(dbres!=(-1))
     {
@@ -766,13 +792,15 @@ int main(int argc, char *argv[]) {
         free(temp12);
     evas_object_name_set(o1, "pdfobj1");
     evas_object_show (o1);
+	*/
     if(dbres!=(-1))
     {
         //int am=get_setting_INT(argv[1],"antialias");
         //if(am>=0)
             //set_antialias_mode(am);
     }
-    
+
+    evas_object_name_set(image, "image");
     render_cur_image();
     //prerender_next_page();
     
@@ -782,6 +810,7 @@ int main(int argc, char *argv[]) {
     
     /* when the main event loop exits, shutdown our libraries */
     if(dbres!=(-1)) {
+		/*
         save_global_settings(argv[1]);
         Evas_Object *pdfobj;
         if(active_image)
@@ -792,11 +821,12 @@ int main(int argc, char *argv[]) {
         evas_object_geometry_get(pdfobj,&x,&y,&w,&h);
         set_setting_INT(argv[1],"current_x",x);
         set_setting_INT(argv[1],"current_y",y);
+		*/
         //set_setting_INT(argv[1],"antialias",get_antialias_mode());
         fini_database();
     }
-    evas_object_del (o1);
-    evas_object_del (o2);
+    //evas_object_del (o1);
+    //evas_object_del (o2);
     evas_object_del (bg);
     //epdf_page_delete (page);
     //epdf_document_delete (document);
