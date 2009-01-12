@@ -32,8 +32,6 @@
 #include <Ecore_File.h>
 #include <Ecore_Evas.h>
 #include <Edje.h>
-//#include <epdf/Epdf.h>
-//#include <GlobalParams.h>
 #include "keyhandler.h"
 #include "dialogs.h"
 #include "madeye.h"
@@ -42,13 +40,10 @@
 
 #define ROUND(f) (int)floor(f + 0.5)
 
-//using namespace std;
-
 //pthread_t thread;
 
 Evas *evas;
 Evas_Object *image;
-//Epdf_Page     *page;
 char          *filename;
 
 //int numpages;
@@ -67,19 +62,15 @@ int righttrim=0;
 int toptrim=0;
 int bottomtrim=0;
 
-
 int winwidth=600;
 int winheight=800;
+
 /*
  * Returns edje theme file name.
  */
- 
 char *get_theme_file(void) {
- 	//char *cwd = get_current_dir_name();
 	char *rel_theme;
 	asprintf(&rel_theme, "%s/%s", "/usr/share/madeye", REL_THEME);
-    //asprintf(&rel_theme, "%s/%s",cwd, REL_THEME);
-	//free(cwd);
 	return rel_theme;
 }
 
@@ -211,7 +202,6 @@ void render_cur_image(void) {
     //epdf_page_size_get (page, &width, &height);
     double fitwidthzoom=((double)get_win_width())/((double)(width-lefttrim-righttrim))*zoom;
     double fitheightzoom=((double)get_win_height())/((double)(height-toptrim-bottomtrim))*zoom;
-    
     
     double scalex;
     double scaley;
@@ -702,13 +692,8 @@ int main(int argc, char *argv[]) {
     ecore_evas_init();
     edje_init();
     
-    /*
-    if (!globalParams)
-        globalParams = new GlobalParams();
-    globalParams->setAntialias("yes");
-    globalParams->setVectorAntialias("yes");
-    */
-    /* setup database */
+	//char *cwd = get_current_dir_name();
+	//free(cwd);
     
     const char *homedir=getenv("HOME");
     char *settingsdir;
@@ -746,12 +731,12 @@ int main(int argc, char *argv[]) {
     evas_object_show(bg);
     
     
-    filename=argv[1];
-    evas_object_image_file_set(image, filename, NULL);
+    //filename=argv[1];
+    evas_object_image_file_set(image, argv[1], NULL);
     if (!image) {
     // manage error here
-        fprintf(stderr,"Error Opening Document");
-
+        fprintf(stderr,"Error Opening %s\n", argv[1]);
+	return 1;
     }
     //numpages=epdf_document_page_count_get(document);
     //page = epdf_page_new (document);
