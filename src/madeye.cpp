@@ -156,39 +156,18 @@ void set_reader_mode(int newreadermode) {
 }
 
 /*
-int get_antialias_mode(void)
-{
-    return (globalParams->getAntialias() && globalParams->getVectorAntialias());
-    
-}
-void set_antialias_mode(int newantialiasmode)
-{
-    if(newantialiasmode)
-    {
-        globalParams->setAntialias("yes");
-        globalParams->setVectorAntialias("yes");
-    }
-    else
-    {
-        globalParams->setAntialias("no");
-        globalParams->setVectorAntialias("no");
-        
-    }
-    
-}
-int get_num_pages(void)
-{
+int get_num_pages(void) {
     return numpages;
 }
-void goto_page(int newpage)
-{
+
+void goto_page(int newpage) {
     curpage=newpage;
     reset_cur_panning();
     render_cur_image();
     //prerender_next_page();
 }
-int get_cur_page(void)
-{
+
+int get_cur_page(void) {
     return curpage;    
 }
 */
@@ -249,7 +228,6 @@ void render_cur_image() {
 #endif
     if(!lefttrim && !righttrim && !toptrim && !bottomtrim)
     {
-        //epdf_page_render (page,pdfobj);
    		evas_object_show(image);
     }
     else
@@ -787,12 +765,6 @@ int main(int argc, char *argv[]) {
     evas_object_name_set(o1, "pdfobj1");
     evas_object_show (o1);
 	*/
-    if(dbres!=(-1))
-    {
-        //int am=get_setting_INT(argv[1],"antialias");
-        //if(am>=0)
-            //set_antialias_mode(am);
-    }
 
     evas_object_name_set(image, "image");
 	evas_object_move(image, 0, 0);
@@ -817,14 +789,11 @@ int main(int argc, char *argv[]) {
         set_setting_INT(argv[1],"current_x",x);
         set_setting_INT(argv[1],"current_y",y);
 		*/
-        //set_setting_INT(argv[1],"antialias",get_antialias_mode());
         fini_database();
     }
     //evas_object_del (o1);
     //evas_object_del (o2);
     evas_object_del (bg);
-    //epdf_page_delete (page);
-    //epdf_document_delete (document);
     
     edje_shutdown();
     ecore_evas_shutdown();
