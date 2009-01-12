@@ -24,9 +24,9 @@
 #include <config.h>
 #endif
 
-#include <iostream>
-#include <cstdlib>
-#include <cmath>
+//#include <iostream>
+//#include <cstdlib>
+#include <math.h>
 #include <Evas.h>
 #include <Ecore.h>
 #include <Ecore_File.h>
@@ -48,7 +48,6 @@ Evas_Object *image;
 
 //int numpages;
 //int curpage=0;
-//bool active_image=1;
 //int prerendering=0;
 int fitmode=FIT_WIDTH;
 int readermode=0;
@@ -565,12 +564,6 @@ void save_global_settings(char *filename) {
 void restore_global_settings(char *filename) {
     int temp11,temp12,temp13,temp14;
     double temp21,temp22,temp23,temp24;
-    /*
-    temp11=get_setting_INT(filename,"current_page");
-    if(temp11>=0)
-        curpage=temp11;
-	*/
-    
     
     temp21=get_setting_DOUBLE(filename,"zoom_increment");
     temp22=get_setting_DOUBLE(filename,"current_zoom");
@@ -616,7 +609,6 @@ int main(int argc, char *argv[]) {
     Ecore_Evas *ee;
     
     Evas_Object *bg; //background
-	//Evas_Object *o1,*o2;
 
     /* initialize our libraries */
     evas_init();
@@ -663,7 +655,6 @@ int main(int argc, char *argv[]) {
     set_key_handler(bg,&main_info);
     evas_object_show(bg);
     
-    
     //filename=argv[1];
 	image = evas_object_image_filled_add(evas);
     evas_object_image_file_set(image, argv[1], NULL);
@@ -673,20 +664,10 @@ int main(int argc, char *argv[]) {
 	return 1;
     }
     //numpages=epdf_document_page_count_get(document);
-    //page = epdf_page_new (document);
     //if (!page) {
     //    fprintf(stderr,"Error Processing Document");
     //}
-    //active_image=1;
 
-    //o2 = evas_object_image_add (evas);
-    //evas_object_move (o2, 0, 0);
-    //evas_object_name_set(o2, "pdfobj2");
-    //evas_object_show (o2);
-
-    //o1 = evas_object_image_add (evas);
-    
-    
 	/*
     char *temp11,*temp12;
     if(dbres!=(-1))
@@ -719,20 +700,13 @@ int main(int argc, char *argv[]) {
     if(dbres!=(-1)) {
 		/*
         save_global_settings(argv[1]);
-        Evas_Object *pdfobj;
-        if(active_image)
-            pdfobj=evas_object_name_find(evas,"pdfobj1");
-        else
-            pdfobj=evas_object_name_find(evas,"pdfobj2"); 
         int x,y,w,h;
-        evas_object_geometry_get(pdfobj,&x,&y,&w,&h);
+        evas_object_geometry_get(image,&x,&y,&w,&h);
         set_setting_INT(argv[1],"current_x",x);
         set_setting_INT(argv[1],"current_y",y);
 		*/
         fini_database();
     }
-    //evas_object_del (o1);
-    //evas_object_del (o2);
     evas_object_del (bg);
     
     edje_shutdown();
