@@ -175,57 +175,43 @@ int get_cur_page(void) {
 void render_cur_image() {
     int width,height;
 	evas_object_image_size_get(image,&width,&height);
-    evas_object_resize(image, 100, 100);
-    evas_object_image_fill_set(image, 0, 0, 100, 100);
+	fprintf(stderr,"w: %d, h: %d\n",width,height);
+	fprintf(stderr,"zoom: %f\n",zoom);
 
-#if 0
-    double fitwidthzoom=((double)get_win_width())/((double)(width-lefttrim-righttrim))*zoom;
-    double fitheightzoom=((double)get_win_height())/((double)(height-toptrim-bottomtrim))*zoom;
-    
-    double scalex;
-    double scaley;
-    
-    if(fitmode==FIT_WIDTH)
-    {
-        scalex=fitwidthzoom;    
-        scaley=fitwidthzoom;
+	//zoom=1.0;
+    if(fitmode==FIT_NO) {
+    	evas_object_resize(image, width, height);
     }
-    else if(fitmode==FIT_HEIGHT)
-    {
-        scalex=fitheightzoom;
-        scaley=fitheightzoom;
-    }
-    else if(fitmode==FIT_BEST)
-    {
-        if(fitwidthzoom<=fitheightzoom)
-        {
-            scalex=fitwidthzoom;
-            scaley=fitwidthzoom;
-        }
-        else
-        {
-            scalex=fitheightzoom;
-            scaley=fitheightzoom;
-        }
-        
-    }
-    else if(fitmode==FIT_STRETCH)
-    {
-        scalex=fitwidthzoom;
-        scaley=fitheightzoom;
-    
-    }
-    else if(fitmode==FIT_NO)
-    {
-        scalex=1.0;
-        scaley=1.0;
-        
-    }
+	else {
+		double scalex;
+		double scaley;
+		double fitwidthzoom=((double)get_win_width())/((double)(width-lefttrim-righttrim))*zoom;
+		double fitheightzoom=((double)get_win_height())/((double)(height-toptrim-bottomtrim))*zoom;
+		fprintf(stderr,"fw: %d, fh: %d\n",fitwidthzoom,fitheightzoom);
+		
+		if(fitmode==FIT_WIDTH)
+			scalex=scaley=fitwidthzoom;
+		else if(fitmode==FIT_HEIGHT)
+			scalex=scaley=fitheightzoom;
+		else if(fitmode==FIT_BEST)
+		{
+			if(fitwidthzoom<=fitheightzoom)
+				scalex=scaley=fitwidthzoom;
+			else
+				scalex=scaley=fitheightzoom;
+		}
+		else if(fitmode==FIT_STRETCH)
+		{
+			scalex=fitwidthzoom;
+			scaley=fitheightzoom;
+		}
+    	evas_object_resize(image, width*scalex, height*scaley);
+	}
+	fprintf(stderr,"sx: %f, sy: %f\n",scalex,scaley);
     
     //epdf_page_scale_set (page,scalex,scaley);
     //epdf_page_scale_set (page,1.0,1.0);
     //epdf_page_scale_set(page,zoom,zoom);
-#endif
     if(!lefttrim && !righttrim && !toptrim && !bottomtrim)
     {
    		evas_object_show(image);
