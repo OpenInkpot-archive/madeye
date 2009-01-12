@@ -183,37 +183,24 @@ void render_cur_image() {
     	evas_object_resize(image, width, height);
     }
 	else {
-		double scalex;
-		double scaley;
-		double fitwidthzoom=((double)get_win_width())/((double)(width-lefttrim-righttrim))*zoom;
-		double fitheightzoom=((double)get_win_height())/((double)(height-toptrim-bottomtrim))*zoom;
-		fprintf(stderr,"fw: %d, fh: %d\n",fitwidthzoom,fitheightzoom);
+		double scalex=((double)get_win_width())/((double)(width-lefttrim-righttrim))*zoom;
+		double scaley=((double)get_win_height())/((double)(height-toptrim-bottomtrim))*zoom;
+		fprintf(stderr,"fw: %d, fh: %d\n",scalex,scaley);
 		
 		if(fitmode==FIT_WIDTH)
-			scalex=scaley=fitwidthzoom;
+			scaley=scalex;
 		else if(fitmode==FIT_HEIGHT)
-			scalex=scaley=fitheightzoom;
-		else if(fitmode==FIT_BEST)
-		{
-			if(fitwidthzoom<=fitheightzoom)
-				scalex=scaley=fitwidthzoom;
+			scalex=scaley;
+		else if(fitmode==FIT_BEST) {
+			if(scalex<=scaley)
+				scaley=scalex;
 			else
-				scalex=scaley=fitheightzoom;
-		}
-		else if(fitmode==FIT_STRETCH)
-		{
-			scalex=fitwidthzoom;
-			scaley=fitheightzoom;
+				scalex=scaley;
 		}
     	evas_object_resize(image, width*scalex, height*scaley);
 	}
-	fprintf(stderr,"sx: %f, sy: %f\n",scalex,scaley);
     
-    //epdf_page_scale_set (page,scalex,scaley);
-    //epdf_page_scale_set (page,1.0,1.0);
-    //epdf_page_scale_set(page,zoom,zoom);
-    if(!lefttrim && !righttrim && !toptrim && !bottomtrim)
-    {
+    if(!lefttrim && !righttrim && !toptrim && !bottomtrim) {
    		evas_object_show(image);
     }
     else
@@ -222,7 +209,7 @@ void render_cur_image() {
                              
         
     }
-    //fprintf(stderr,"\nwidth=%d,height=%d,ltrim=%d,rtrim=%d,ttrim=%d,btrim=%d,fwzoom=%f,fhzoom=%f\n",width,height,lefttrim,righttrim,toptrim,bottomtrim,fitwidthzoom,fitheightzoom);
+    //fprintf(stderr,"\nwidth=%d,height=%d,ltrim=%d,rtrim=%d,ttrim=%d,btrim=%d,fwzoom=%f,fhzoom=%f\n",width,height,lefttrim,righttrim,toptrim,bottomtrim,scalex,fitheightzoom);
 }
 
 #if 0
@@ -311,17 +298,9 @@ int are_legal_coords(int x1,int y1,int x2,int y2) {
         return 1;
     return 0;
     
-    
 }
 
 void pan_cur_page(int panx,int pany) {
-	/*
-    Evas_Object *pdfobj;
-    if(active_image)
-        pdfobj=evas_object_name_find(evas,"pdfobj1");
-    else
-        pdfobj=evas_object_name_find(evas,"pdfobj2"); 
-	*/
     int x,y,w,h;
     evas_object_geometry_get(image,&x,&y,&w,&h);
     
@@ -331,14 +310,7 @@ void pan_cur_page(int panx,int pany) {
 }
 
 void reset_cur_panning(void) {
-	/*
-    Evas_Object *pdfobj;
-    if(active_image)
-        pdfobj=evas_object_name_find(evas,"pdfobj1");
-    else
-        pdfobj=evas_object_name_find(evas,"pdfobj2"); 
-    evas_object_move (pdfobj,0,0);    
-	*/
+    evas_object_move (image,0,0);    
 }
 
 void reset_next_panning(void) {
