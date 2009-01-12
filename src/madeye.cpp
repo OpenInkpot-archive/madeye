@@ -179,7 +179,8 @@ void render_cur_image() {
 
 	//zoom=1.0;
     if(fitmode==FIT_NO) {
-    	evas_object_resize(image, width, height);
+		//FIXME
+    	evas_object_resize(image, width*zoom, height*zoom);
     }
 	else {
 		double scalex=((double)get_win_width())/((double)(width-lefttrim-righttrim))*zoom;
