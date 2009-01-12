@@ -478,48 +478,30 @@ void main_item(Evas *e, Evas_Object *obj,int index, bool lp) {
     }
     else if(index==7)
     {
-		/*
         if((zoom-zoominc)>0)
         {
-            Evas_Object *pdfobj;
-            if(active_image)
-                pdfobj=evas_object_name_find(evas,"pdfobj1");
-            else
-                pdfobj=evas_object_name_find(evas,"pdfobj2"); 
             int x,y,w,h;
-            evas_object_geometry_get(pdfobj,&x,&y,&w,&h);
+            evas_object_geometry_get(image,&x,&y,&w,&h);
             int new_w=ROUND(((double)w)*(zoom-zoominc)/zoom);
             int new_h=ROUND(((double)h)*(zoom-zoominc)/zoom);
             if(are_legal_coords(x,y,x+new_w,y+new_h))
             {
                 zoom-=zoominc;
                 render_cur_image();
-                //prerender_next_page();
             }
         }
-		*/
-        
     }
     else if(index==8)
     {
-		/*
-        Evas_Object *pdfobj;
-        if(active_image)
-            pdfobj=evas_object_name_find(evas,"pdfobj1");
-        else
-            pdfobj=evas_object_name_find(evas,"pdfobj2"); 
         int x,y,w,h;
-        evas_object_geometry_get(pdfobj,&x,&y,&w,&h);
+        evas_object_geometry_get(image,&x,&y,&w,&h);
         int new_w=ROUND(((double)w)*(zoom+zoominc)/zoom);
         int new_h=ROUND(((double)h)*(zoom+zoominc)/zoom);
         if(are_legal_coords(x,y,x+new_w,y+new_h))
         {
             zoom+=zoominc;
             render_cur_image();
-           // prerender_next_page();
         }
-		*/
-        
     }
     else if(index==9)
     {
