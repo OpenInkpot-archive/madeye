@@ -194,18 +194,12 @@ int get_cur_page(void)
 */
 
 void render_cur_image() {
-    Evas_Object *pdfobj=evas_object_name_find(evas,"image");
-	evas_object_move(image, 0, 0);
+    int width,height;
+	evas_object_image_size_get(image,&width,&height);
     evas_object_resize(image, 100, 100);
     evas_object_image_fill_set(image, 0, 0, 100, 100);
-    evas_object_show(image);
 
 #if 0
-    //sprintf(pdfobjstr,"pdfobj%d",active_image);    
-    //Evas_Object *pdfobj=evas_object_name_find(evas,pdfobjstr);
-    //epdf_page_page_set(page,curpage);
-    int width,height;
-    //epdf_page_size_get (page, &width, &height);
     double fitwidthzoom=((double)get_win_width())/((double)(width-lefttrim-righttrim))*zoom;
     double fitheightzoom=((double)get_win_height())/((double)(height-toptrim-bottomtrim))*zoom;
     
@@ -252,9 +246,11 @@ void render_cur_image() {
     //epdf_page_scale_set (page,scalex,scaley);
     //epdf_page_scale_set (page,1.0,1.0);
     //epdf_page_scale_set(page,zoom,zoom);
+#endif
     if(!lefttrim && !righttrim && !toptrim && !bottomtrim)
     {
         //epdf_page_render (page,pdfobj);
+   		evas_object_show(image);
     }
     else
     {
@@ -263,7 +259,6 @@ void render_cur_image() {
         
     }
     //fprintf(stderr,"\nwidth=%d,height=%d,ltrim=%d,rtrim=%d,ttrim=%d,btrim=%d,fwzoom=%f,fhzoom=%f\n",width,height,lefttrim,righttrim,toptrim,bottomtrim,fitwidthzoom,fitheightzoom);
-#endif
 }
 
 #if 0
@@ -344,7 +339,6 @@ void *thread_func(void *vptr_args)
 #endif
 
 int are_legal_coords(int x1,int y1,int x2,int y2) {
-    
     int xs_in_range=((x1>0&&x1<get_win_width())||(x2>0&&x2<get_win_width()));
     int ys_in_range=((y1>0&&y1<get_win_height())||(y2>0&&y2<get_win_height()));
     int xs_opposite=(x1<=0&&x2>=get_win_width());
@@ -363,13 +357,13 @@ void pan_cur_page(int panx,int pany) {
         pdfobj=evas_object_name_find(evas,"pdfobj1");
     else
         pdfobj=evas_object_name_find(evas,"pdfobj2"); 
+	*/
     int x,y,w,h;
-    evas_object_geometry_get(pdfobj,&x,&y,&w,&h);
+    evas_object_geometry_get(image,&x,&y,&w,&h);
     
     
     if(are_legal_coords(x+panx,y+pany,x+w+panx,y+h+pany))
-        evas_object_move (pdfobj,x+panx,y+pany);
-	*/
+        evas_object_move (image,x+panx,y+pany);
 }
 
 void reset_cur_panning(void) {
@@ -404,6 +398,7 @@ void ensure_thread_dead(void) {
 }
 
 void prerender_next_page(void) {
+	//evas_object_image_preload(Evas_Object *obj, Evas_Bool cancel)
     //ensure_thread_dead();
     //prerendering=1;
     //pthread_create(&thread, NULL, thread_func, NULL);
@@ -515,7 +510,6 @@ void main_nav_menubtn(Evas *e, Evas_Object *obj) {
 }
 
 void main_item(Evas *e, Evas_Object *obj,int index, bool lp) {
-    //int paninc=5;
     if(index==1)
     {
         pan_cur_page((-1)*ROUND(((double)get_win_width())*hpaninc),0);
@@ -753,7 +747,7 @@ int main(int argc, char *argv[]) {
     
     
     //filename=argv[1];
-	image = evas_object_image_add(evas);
+	image = evas_object_image_filled_add(evas);
     evas_object_image_file_set(image, argv[1], NULL);
     if (!image) {
     // manage error here
@@ -801,6 +795,7 @@ int main(int argc, char *argv[]) {
     }
 
     evas_object_name_set(image, "image");
+	evas_object_move(image, 0, 0);
     render_cur_image();
     //prerender_next_page();
     
