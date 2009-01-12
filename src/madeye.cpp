@@ -336,8 +336,7 @@ void *thread_func(void *vptr_args)
 }
 #endif
 
-int are_legal_coords(int x1,int y1,int x2,int y2)
-{
+int are_legal_coords(int x1,int y1,int x2,int y2) {
     
     int xs_in_range=((x1>0&&x1<get_win_width())||(x2>0&&x2<get_win_width()));
     int ys_in_range=((y1>0&&y1<get_win_height())||(y2>0&&y2<get_win_height()));
@@ -350,8 +349,7 @@ int are_legal_coords(int x1,int y1,int x2,int y2)
     
 }
 
-void pan_cur_page(int panx,int pany)
-{
+void pan_cur_page(int panx,int pany) {
     Evas_Object *pdfobj;
     if(active_image)
         pdfobj=evas_object_name_find(evas,"pdfobj1");
@@ -383,8 +381,7 @@ void reset_next_panning(void) {
     evas_object_move (pdfobj,0,0);    
 }
 
-void ensure_thread_dead(void)
-{
+void ensure_thread_dead(void) {
     /*
     if(prerendering)
         pthread_join(thread, NULL);
@@ -500,8 +497,7 @@ void main_nav_menubtn(Evas *e, Evas_Object *obj) {
     
 }
 
-void main_item(Evas *e, Evas_Object *obj,int index, bool lp)
-{
+void main_item(Evas *e, Evas_Object *obj,int index, bool lp) {
     //int paninc=5;
     if(index==1)
     {
@@ -696,17 +692,18 @@ int main(int argc, char *argv[]) {
 	//free(cwd);
     
     const char *homedir=getenv("HOME");
+
     char *settingsdir;
     asprintf(&settingsdir,"%s/%s",homedir,".madeye/");
     if(!ecore_file_path_dir_exists(settingsdir))
-    {
         ecore_file_mkpath(settingsdir);
-    }
     free(settingsdir);
+
     char *dbfile;
     asprintf(&dbfile,"%s/%s",homedir,".madeye/files.db");
     int dbres=init_database(dbfile);
     free(dbfile);
+
     if(dbres!=(-1))
         restore_global_settings(argv[1]);
     /* create our Ecore_Evas and show it */
