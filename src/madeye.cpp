@@ -179,7 +179,6 @@ void render_cur_image() {
 
 	//zoom=1.0;
     if(fitmode==FIT_NO) {
-		//FIXME
     	evas_object_resize(image, width*zoom, height*zoom);
     }
 	else {
@@ -617,9 +616,6 @@ int main(int argc, char *argv[]) {
     ecore_evas_init();
     edje_init();
     
-	//char *cwd = get_current_dir_name();
-	//free(cwd);
-    
     const char *homedir=getenv("HOME");
 
     char *settingsdir;
@@ -662,8 +658,13 @@ int main(int argc, char *argv[]) {
     if (!image) {
     // manage error here
         fprintf(stderr,"Error Opening %s\n", argv[1]);
-	return 1;
+		return 1;
     }
+
+	char *path;
+	path = ecore_file_realpath(argv[1]);
+	fprintf(stderr,"path: %s\n",path);
+
     //numpages=epdf_document_page_count_get(document);
     //if (!page) {
     //    fprintf(stderr,"Error Processing Document");
