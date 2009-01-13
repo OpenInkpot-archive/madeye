@@ -293,7 +293,7 @@ void FitModeDialog(Evas *e, Evas_Object *obj)
        		"",
 	};
     
-	fitmodechoicebox=init_choicebox(e,initchoices, values, 5, fitmode_choicehandler, "Fit Mode Settings",obj, true);
+	fitmodechoicebox=init_choicebox(e,initchoices, values, 5, fitmode_choicehandler, "Fit Mode Settings",obj, NULL, true);
     
     int x,y,w,h;
     evas_object_geometry_get(fitmodechoicebox,&x,&y,&w,&h);
@@ -359,7 +359,7 @@ void TrimmingDialog(Evas *e, Evas_Object *obj)
 		bottomtrim,
 	};
     
-	trimmingchoicebox=init_choicebox(e,initchoices, values, 4, trimming_choicehandler, "Trimming Settings",obj, true);
+	trimmingchoicebox=init_choicebox(e,initchoices, values, 4, trimming_choicehandler, "Trimming Settings",obj, NULL, true);
     
     int x,y,w,h;
     evas_object_geometry_get(trimmingchoicebox,&x,&y,&w,&h);
@@ -448,7 +448,7 @@ void PreferencesDialog(Evas *e, Evas_Object *obj)
         OFF_ON_STRINGS[get_reader_mode()],
 	};
     
-	preferenceschoicebox=init_choicebox(e,initchoices, values, 7, preferences_choicehandler, "madEYE Settings",obj, true);
+	preferenceschoicebox=init_choicebox(e,initchoices, values, 7, preferences_choicehandler, "madEYE Settings",obj, NULL, true);
     int x,y,w,h;
     evas_object_geometry_get(preferenceschoicebox,&x,&y,&w,&h);
     evas_object_move(preferenceschoicebox,(int)(((double)get_win_width()-w)/2.0),(int)(((double)get_win_height()-h)/2.0));
