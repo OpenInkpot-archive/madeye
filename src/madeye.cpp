@@ -700,8 +700,8 @@ int main(int argc, char *argv[]) {
     
     /* when the main event loop exits, shutdown our libraries */
     if(dbres!=(-1)) {
-		/*
         save_global_settings(argv[1]);
+		/*
         int x,y,w,h;
         evas_object_geometry_get(image,&x,&y,&w,&h);
         set_setting_INT(argv[1],"current_x",x);
