@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2008 by Marc Lajoie                                     *
- *   quickhand@openinkpot.org                                                         *
+ *   quickhand@openinkpot.org                                              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,6 +43,7 @@ static void _key_handler(void *data, Evas *evas, Evas_Object *obj, void *event_i
     key_handler_info_t* handler_info = (key_handler_info_t*)data;
 
     const char* k = e->keyname;
+	fprintf(stderr,"key: %s\n",k);
 
 #define HANDLE_ITEM(h, params, lp) { if(handler_info->h) (*handler_info->h)(evas,obj,params, lp);}
 #define HANDLE_KEY(h) {if(handler_info->h) (*handler_info->h)(evas,obj);}
@@ -80,8 +81,7 @@ static void _key_handler(void *data, Evas *evas, Evas_Object *obj, void *event_i
     else if (!strcmp(k, "+"))        HANDLE_KEY(shift_handler)
 }
 
-void set_key_handler(Evas_Object* obj, key_handler_info_t* handler_info)
-{
+void set_key_handler(Evas_Object* obj, key_handler_info_t* handler_info) {
     evas_object_event_callback_add(obj,EVAS_CALLBACK_KEY_UP,_key_handler,handler_info);
 }
 

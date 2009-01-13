@@ -444,7 +444,7 @@ void PreferencesDialog(Evas *e, Evas_Object *obj)
 		"",
 		zoom,
         FIT_STRINGS[get_fit_mode()],
-        //OFF_ON_STRINGS[get_antialias_mode()],
+        OFF_ON_STRINGS[0],
         OFF_ON_STRINGS[get_reader_mode()],
 	};
     
