@@ -32,6 +32,7 @@
 #include <Ecore_File.h>
 #include <Ecore_Evas.h>
 #include <Edje.h>
+#include <Efreet_Mime.h>
 #include "keyhandler.h"
 #include "dialogs.h"
 #include "madeye.h"
@@ -44,6 +45,9 @@
 
 Evas *evas;
 Evas_Object *image;
+
+Ecore_List *filelist;
+
 //char          *filename;
 
 //int numpages;
@@ -663,13 +667,15 @@ int main(int argc, char *argv[]) {
     }
 
 	char *path;
-	path = ecore_file_realpath(argv[1]);
+	path = ecore_file_dir_get(argv[1]);
 	fprintf(stderr,"path: %s\n",path);
+	filelist = ecore_file_ls(path);
+	fprintf(stderr,"number of files: %d\n",ecore_list_count(filelist));
+	efreet_mime_init();
+	for (int i=1;i<ecore_list_count(filelist);i++){
 
-    //numpages=epdf_document_page_count_get(document);
-    //if (!page) {
-    //    fprintf(stderr,"Error Processing Document");
-    //}
+	}
+	efreet_mime_shutdown();
 
 	/*
     char *temp11,*temp12;
