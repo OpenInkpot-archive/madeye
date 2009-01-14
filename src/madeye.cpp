@@ -64,6 +64,9 @@ int bottomtrim=0;
 int winwidth=600;
 int winheight=800;
 
+int abs_lefttrim=0;
+int abs_toptrim=0;
+
 /*
  * Returns edje theme file name.
  */
@@ -177,38 +180,37 @@ void render_cur_image() {
 	fprintf(stderr,"w: %d, h: %d\n",width,height);
 	fprintf(stderr,"zoom: %f\n",zoom);
 
-	//zoom=1.0;
     if(fitmode==FIT_NO) {
     	evas_object_resize(image, width*zoom, height*zoom);
-    }
+   		evas_object_show(image);
+	}
 	else {
 		double scalex=((double)get_win_width())/((double)(width-lefttrim-righttrim))*zoom;
 		double scaley=((double)get_win_height())/((double)(height-toptrim-bottomtrim))*zoom;
-		fprintf(stderr,"fw: %d, fh: %d\n",scalex,scaley);
+		fprintf(stderr,"sx: %f, sy: %f\n",scalex,scaley);
 		
 		if(fitmode==FIT_WIDTH)
 			scaley=scalex;
 		else if(fitmode==FIT_HEIGHT)
 			scalex=scaley;
-		else if(fitmode==FIT_BEST) {
+		else if(fitmode==FIT_BEST)
 			if(scalex<=scaley)
 				scaley=scalex;
 			else
 				scalex=scaley;
-		}
+
     	evas_object_resize(image, width*scalex, height*scaley);
-	}
-    
-    if(!lefttrim && !righttrim && !toptrim && !bottomtrim) {
+
+		int x,y;
+		evas_object_geometry_get(image,&x,&y,NULL,NULL);
+		x+=abs_lefttrim;
+		y+=abs_toptrim;
+
+		abs_lefttrim=scalex*lefttrim;
+		abs_toptrim=scaley*toptrim;
+		evas_object_move(image,x-abs_lefttrim,y-abs_toptrim);
    		evas_object_show(image);
-    }
-    else
-    {
-        //epdf_page_render_slice (page,pdfobj,(int)(((double)lefttrim)*scalex),(int)(((double)toptrim)*scaley),(int)(((double)(width-lefttrim-righttrim))*scalex),(int)(((double)(height-toptrim-bottomtrim))*scaley));
-                             
-        
-    }
-    //fprintf(stderr,"\nwidth=%d,height=%d,ltrim=%d,rtrim=%d,ttrim=%d,btrim=%d,fwzoom=%f,fhzoom=%f\n",width,height,lefttrim,righttrim,toptrim,bottomtrim,scalex,fitheightzoom);
+	}
 }
 
 #if 0
@@ -303,9 +305,8 @@ void pan_cur_page(int panx,int pany) {
     int x,y,w,h;
     evas_object_geometry_get(image,&x,&y,&w,&h);
     
-    
     if(are_legal_coords(x+panx,y+pany,x+w+panx,y+h+pany))
-        evas_object_move (image,x+panx,y+pany);
+        evas_object_move(image,x+panx,y+pany);
 }
 
 void reset_cur_panning(void) {
