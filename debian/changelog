@@ -1,3 +1,9 @@
+madeye (0.0-2) asimov; urgency=low
+
+  * Fixed dependencies
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Wed, 18 Mar 2009 11:27:16 +0100
+
 madeye (0.0-1) unstable; urgency=low
 
   * first build
