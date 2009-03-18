@@ -1,7 +1,7 @@
 Source: madeye
 Section: media
 Maintainer: Alexander Kerner <lunohod@openinkpot.org>
-XCS-Cross-Host-Build-Depends: debhelper (>> 2.0.0), cdbs-slind
+XCS-Cross-Host-Build-Depends: debhelper (>> 2.0.0), cdbs, cdbs-embedded, autoconf, automake, libtool, pkg-config
 XCS-Cross-Build-Depends: libevas-dev, libecore-dev, libefreet-dev, libedje-dev, libsqlite3-dev
 Priority: optional
 Standards-Version: 3.6.2
