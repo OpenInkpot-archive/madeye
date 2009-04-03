@@ -1,3 +1,9 @@
+madeye (0.0-2+b1) asimov; urgency=low
+
+  * Rebuild with new toolchain.
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Fri, 03 Apr 2009 17:36:20 +0200
+
 madeye (0.0-2) asimov; urgency=low
 
   * Fixed dependencies
