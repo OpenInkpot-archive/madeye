@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=madeye
+Name[ru]=madeye
+GenericName=Image viewer
+GenericName[ru]=Просмотр изображений
+Comment=Image viewer
+Comment[ru]=Просмотр изображений
+TryExec=madeye
+Exec=madeye %F
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Viewer;Graphics;
+MimeType=image/x-pixmap;image/png;image/jpeg;image/gif;
