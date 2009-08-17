@@ -1,3 +1,9 @@
+madeye (0.0-3+b1) asimov; urgency=low
+
+  * Rebuild due to EFL update.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Tue, 18 Aug 2009 05:42:45 +0700
+
 madeye (0.0-3) asimov; urgency=low
 
   * added madeye.desktop
