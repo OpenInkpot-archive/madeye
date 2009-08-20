@@ -46,7 +46,7 @@
 Evas *evas;
 Evas_Object *image;
 
-Ecore_List *filelist;
+//Ecore_List *filelist;
 
 //char          *filename;
 
@@ -665,7 +665,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr,"Error Opening %s\n", argv[1]);
 		return 1;
     }
-
+	/* turned off for now TODO
 	char *path;
 	path = ecore_file_dir_get(argv[1]);
 	fprintf(stderr,"path: %s\n",path);
@@ -673,8 +673,8 @@ int main(int argc, char *argv[]) {
 	fprintf(stderr,"number of files: %d\n",ecore_list_count(filelist));
 	efreet_mime_init();
 	for (int i=1;i<ecore_list_count(filelist);i++){
-
 	}
+	*/
 	efreet_mime_shutdown();
 
 	/*
