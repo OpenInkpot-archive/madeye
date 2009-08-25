@@ -1,3 +1,9 @@
+madeye (0.1) asimov; urgency=low
+
+  * full rewrite
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 25 Aug 2009 19:13:19 +0200
+
 madeye (0.0-3+b1) asimov; urgency=low
 
   * Rebuild due to EFL update.
