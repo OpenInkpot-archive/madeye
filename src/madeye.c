@@ -77,9 +77,9 @@ struct _op operations[] = {
 
 unsigned char contr_up[256], contr_down[256];
 
-#define R_VAL(__p__) *__p__
+#define R_VAL(__p__) *(__p__+2)
 #define G_VAL(__p__) *(__p__+1)
-#define B_VAL(__p__) *(__p__+2)
+#define B_VAL(__p__) *(__p__)
 #define Y_VAL(__p__) (0xff&((306*(0xff&(int)R_VAL(__p__)) + 601*(0xff&(int)G_VAL(__p__)) + 117*(0xff&(int)B_VAL(__p__)))/1024))
 
 void exit_all(void *param) { ecore_main_loop_quit(); }
@@ -308,29 +308,27 @@ void floyd_steinberg_dither()
 
 	x = c;
 	// convert first line to grayscale
-	for(int i = 0; i < w; i++)
+	for(int i = 0; i < w; i++) {
 		if(!(R_VAL(x) == G_VAL(x) && G_VAL(x) == B_VAL(x))) {
-
 			xi = Y_VAL(x);
 			CHECK_BOUNDS(xi);
 			G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
-
-			x += 4;
 		}
+		x += 4;
+	}
 
 	for(int j = 0; j < h; j++) {
 		x = c + (j+1) * stride * 4;
 
 		// convert next line to grayscale
-		for(int i = 0; j<(h-1) && i < w; i++)
+		for(int i = 0; j<(h-1) && i < w; i++) {
 			if(!(R_VAL(x) == G_VAL(x) && G_VAL(x) == B_VAL(x))) {
-
 				xi = Y_VAL(x);
 				CHECK_BOUNDS(xi);
 				G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
-
-				x += 4;
 			}
+			x += 4;
+		}
 
 		for(int i = 0; i < w; i++) {
 			x = c + j * stride * 4 + i * 4;
