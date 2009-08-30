@@ -108,7 +108,6 @@ static void main_win_resize_handler(Ecore_Evas* main_win)
 
 	Evas_Object *bg = evas_object_name_find(canvas, "background");
 	evas_object_resize(bg, w, h);
-	evas_object_image_size_set(image, w, h);
 	
 	render_cur_image();
 
@@ -144,11 +143,10 @@ void render_cur_image()
 		height = winheight;
 	}
 
+	evas_object_move(image, (winwidth - width) / 2, (winheight - height) / 2);
 	evas_object_resize(image, width, height);
 	evas_object_show(image);
 }
-
-
 
 void init_contrast_tables()
 {
@@ -485,7 +483,6 @@ int main(int argc, char *argv[])
 
 	image = evas_object_image_filled_add(evas);
 	evas_object_name_set(image, "image");
-	evas_object_move(image, 0, 0);
 
 	read_keymap();
 	init_filelist(argv[1]);
