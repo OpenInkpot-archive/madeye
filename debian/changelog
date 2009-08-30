@@ -1,3 +1,14 @@
+madeye (0.1-2) asimov; urgency=low
+
+  [ Alexander Kerner ]
+  * fix contrast LUT table
+  * center image
+
+  [ Tomasz Długosz ]
+  * polish added in .desktop file
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sun, 30 Aug 2009 19:30:49 +0200
+
 madeye (0.1-1) asimov; urgency=low
 
   * fix dithering issues
