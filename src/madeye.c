@@ -160,7 +160,7 @@ void init_contrast_tables()
 	k3 = 0.9 * 1024;
 	k4 = k3 / 2;
 
-	for(unsigned int i = 0; i < 256; i++) {
+	for(int i = 0; i < 256; i++) {
 		x = (i * k1 - k2 + 512) / 1024;
 		if(x < 0) x = 0;
 		else if(x > 255) x = 255;
