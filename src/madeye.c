@@ -26,6 +26,7 @@
 
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 #include <Evas.h>
 #include <Ecore.h>
 #include <Ecore_X.h>
@@ -36,8 +37,9 @@
 #include "madeye.h"
 #include "keyboard.h"
 
+Evas_Object *orig_image;
 Evas_Object *image;
-bool dithered = false;
+bool dither = false;
 
 Eina_List *filelist;
 Eina_List *cur_file;
@@ -52,6 +54,8 @@ char *supported_types[] = {
 int winwidth = 600;
 int winheight = 800;
 
+int brightness_level = 0, contrast_level = 0;
+
 void render_cur_image();
 void next_image();
 void prev_image();
@@ -59,8 +63,7 @@ void inc_brighness();
 void dec_brighness();
 void inc_contrast();
 void dec_contrast();
-void reload();
-void dither();
+void toggle_dithering();
 void quit();
 
 struct _op operations[] = {
@@ -70,12 +73,12 @@ struct _op operations[] = {
 	{ "DEC_BRIGHTNESS", dec_brighness },
 	{ "INC_CONTRAST", inc_contrast },
 	{ "DEC_CONTRAST", dec_contrast },
-	{ "DITHER", dither },
-	{ "RELOAD", reload },
+	{ "DITHER", toggle_dithering },
+	{ "RELOAD", render_cur_image },
 	{ NULL, NULL},
 };
 
-unsigned char contr_up[256], contr_down[256];
+unsigned char lut[256];
 
 #define R_VAL(__p__) *(__p__+2)
 #define G_VAL(__p__) *(__p__+1)
@@ -114,20 +117,27 @@ static void main_win_resize_handler(Ecore_Evas* main_win)
 	ecore_evas_show(main_win);
 }
 
-void reload()
-{
-	evas_object_image_file_set(image, eina_list_data_get(cur_file), NULL);
-	//evas_object_image_reload(image);
-	dithered = false;
-}
-
 void render_cur_image()
 {
 	double zoom = 1.0;
 	int width, height;
 
-	evas_object_image_file_set(image, eina_list_data_get(cur_file), NULL);
-	evas_object_image_size_get(image, &width, &height);
+	brightness_level = 0;
+	contrast_level = 0;
+
+	evas_object_image_file_set(orig_image, eina_list_data_get(cur_file), NULL);
+	evas_object_image_size_get(orig_image, &width, &height);
+	int stride = evas_object_image_stride_get(orig_image);
+
+	if(dither)
+		floyd_steinberg_dither();
+
+	//evas_object_image_file_set(image, eina_list_data_get(cur_file), NULL);
+	evas_object_image_size_set(image, width, height);
+
+	char *s = evas_object_image_data_get(orig_image, EINA_FALSE);
+	char *t = evas_object_image_data_get(image, EINA_TRUE);
+	memcpy(t, s, stride * height * 4);
 
 	if(width > winwidth) {
 		zoom = 1.0 * width / winwidth;
@@ -143,55 +153,51 @@ void render_cur_image()
 		height = winheight;
 	}
 
+	evas_object_image_data_update_add(image, 0, 0, width, height);
 	evas_object_move(image, (winwidth - width) / 2, (winheight - height) / 2);
 	evas_object_resize(image, width, height);
 	evas_object_show(image);
 }
 
-void init_contrast_tables()
+void fill_lut()
 {
-	int k1, k2, k3, k4, x;
+	int x;
+	float k;
 
-	k1 = 1.1 * 1024;
-	k2 = k1 / 2;
-
-	k3 = 0.9 * 1024;
-	k4 = k3 / 2;
+	if(contrast_level < 0) {
+		k = pow(1.1, -contrast_level);
+		k = 1/k;
+	} else if(contrast_level > 0)
+		k = pow(1.1, contrast_level);
+	else
+		k = 1;
 
 	for(int i = 0; i < 256; i++) {
-		x = (i * k1 - k2 + 512) / 1024;
-		if(x < 0) x = 0;
-		else if(x > 255) x = 255;
-		contr_up[i] = x;
+		x = i + brightness_level * 25;
+		x = x * k;
 
-		x = (i * k3 - k4 + 512) / 1024;
-		if(x < 0) x = 0;
-		else if(x > 255) x = 255;
-		contr_down[i] = x;
+		if(x < 0)
+			x = 0;
+		else if(x > 255)
+			x = 255;
+
+		lut[i] = x;
 	}
 }
 
-void change_contrast(int v)
+void adjust_image()
 {
 	int w, h, stride;
-
-	unsigned char *t;
-
-	if(v > 0)
-		t = contr_up;
-	else
-		t = contr_down;
 
 	evas_object_image_size_get(image, &w, &h);
 	stride = evas_object_image_stride_get(image);
 
 	int c;
-	char *p = evas_object_image_data_get(image, EINA_TRUE);
+	char *p = evas_object_image_data_get(orig_image, EINA_FALSE);
+	char *_p = evas_object_image_data_get(image, EINA_TRUE);
 
 	for(int j = 0; j < h; j++) {
 		for(int i = 0; i < w; i++) {
-			c = R_VAL(p) & 0xff;
-
 			if(!(R_VAL(p) == G_VAL(p) && G_VAL(p) == B_VAL(p))) {
 				c = Y_VAL(p);
 
@@ -199,46 +205,17 @@ void change_contrast(int v)
 					c = 0;
 				else if(c > 255)
 					c = 255;
+			} else {
+				c = R_VAL(p) & 0xff;
 			}
 
-			G_VAL(p) = B_VAL(p) = R_VAL(p) = t[c];
+			G_VAL(_p) = B_VAL(_p) = R_VAL(_p) = lut[c];
 
 			p += 4;
+			_p += 4;
 		}
 		p += (stride - w) * 4;
-	}
-
-	evas_object_image_data_update_add(image, 0, 0, w, h);
-}
-
-void change_brightness(char v)
-{
-	int w, h, stride;
-
-	evas_object_image_size_get(image, &w, &h);
-	stride = evas_object_image_stride_get(image);
-
-	int c;
-	char *p = evas_object_image_data_get(image, EINA_TRUE);
-
-	for(int j = 0; j < h; j++) {
-		for(int i = 0; i < w; i++) {
-			c = R_VAL(p) & 0xff;
-
-			if(R_VAL(p) == G_VAL(p) && G_VAL(p) == B_VAL(p))
-				c += v;
-			else
-				c = Y_VAL(p) + v;
-
-			if(c < 0)
-				c = 0;
-			else if(c > 255) c = 255;
-
-			G_VAL(p) = B_VAL(p) = R_VAL(p) = c;
-
-			p += 4;
-		}
-		p += (stride - w) * 4;
+		_p += (stride - w) * 4;
 	}
 
 	evas_object_image_data_update_add(image, 0, 0, w, h);
@@ -246,22 +223,42 @@ void change_brightness(char v)
 
 void inc_brighness()
 {
-	change_brightness(25);
+	if(brightness_level > 5)
+		return;
+
+	brightness_level++;
+	fill_lut();
+	adjust_image();
 }
 
 void dec_brighness()
 {
-	change_brightness(-25);
+	if(brightness_level < -5)
+		return;
+
+	brightness_level--;
+	fill_lut();
+	adjust_image();
 }
 
 void inc_contrast()
 {
-	change_contrast(1);
+	if(contrast_level > 5)
+		return;
+
+	contrast_level++;
+	fill_lut();
+	adjust_image();
 }
 
 void dec_contrast()
 {
-	change_contrast(-1);
+	if(contrast_level < -5)
+		return;
+
+	contrast_level--;
+	fill_lut();
+	adjust_image();
 }
 
 void next_image()
@@ -271,7 +268,6 @@ void next_image()
 		cur_file = filelist;
 
 	render_cur_image();
-	dithered = false;
 }
 
 void prev_image()
@@ -281,7 +277,6 @@ void prev_image()
 		cur_file = eina_list_last(filelist);
 
 	render_cur_image();
-	dithered = false;
 }
 
 void floyd_steinberg_dither()
@@ -290,10 +285,10 @@ void floyd_steinberg_dither()
 
 #define CHECK_BOUNDS(__x__) if(__x__ < 0) __x__ = 0; else if(__x__ > 255) __x__ = 255;
 
-	evas_object_image_size_get(image, &w, &h);
-	stride = evas_object_image_stride_get(image);
+	evas_object_image_size_get(orig_image, &w, &h);
+	stride = evas_object_image_stride_get(orig_image);
 
-	unsigned char *c = evas_object_image_data_get(image, EINA_TRUE);
+	unsigned char *c = evas_object_image_data_get(orig_image, EINA_TRUE);
 
 	int xi;
 	unsigned char *x;
@@ -375,23 +370,14 @@ void floyd_steinberg_dither()
 		}
 	}
 
-	evas_object_image_data_update_add(image, 0, 0, w, h);
+	evas_object_image_data_update_add(orig_image, 0, 0, w, h);
 }
 
-
-void dither() {
-
-	if(dithered) {
-		reload();
-		dithered = false;
-	} else {
-		reload();
-		floyd_steinberg_dither();
-		dithered = true;
-	}
+void toggle_dithering()
+{
+	dither = !dither;
+	render_cur_image();
 }
-
-
 
 void init_filelist(const char *file)
 {
@@ -429,12 +415,6 @@ void init_filelist(const char *file)
 	}
 
 	eina_list_free(ls);
-
-/*	EINA_LIST_FOREACH(filelist, l, f)
-		fprintf(stderr, "file: %s\n", f);
-
-	fprintf(stderr, "curr file: %s\n", eina_list_data_get(cur_file));
-*/
 
 	efreet_mime_shutdown();
 }
@@ -481,12 +461,13 @@ int main(int argc, char *argv[])
 	evas_object_event_callback_add(bg, EVAS_CALLBACK_KEY_UP, &key_handler, NULL);
 	evas_object_show(bg);
 
+	orig_image = evas_object_image_filled_add(evas);
+	evas_object_name_set(orig_image, "orig_image");
 	image = evas_object_image_filled_add(evas);
 	evas_object_name_set(image, "image");
 
 	read_keymap();
 	init_filelist(argv[1]);
-	init_contrast_tables();
 	render_cur_image();
 
 	/* start the main event loop */
