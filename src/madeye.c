@@ -132,7 +132,6 @@ void render_cur_image()
 	if(dither)
 		floyd_steinberg_dither();
 
-	//evas_object_image_file_set(image, eina_list_data_get(cur_file), NULL);
 	evas_object_image_size_set(image, width, height);
 
 	char *s = evas_object_image_data_get(orig_image, EINA_FALSE);
@@ -153,6 +152,7 @@ void render_cur_image()
 		height = winheight;
 	}
 
+	evas_object_image_alpha_set(image, evas_object_image_alpha_get(orig_image));
 	evas_object_image_data_update_add(image, 0, 0, width, height);
 	evas_object_move(image, (winwidth - width) / 2, (winheight - height) / 2);
 	evas_object_resize(image, width, height);
