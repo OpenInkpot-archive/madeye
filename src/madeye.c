@@ -138,6 +138,9 @@ void render_cur_image()
 	char *t = evas_object_image_data_get(image, EINA_TRUE);
 	memcpy(t, s, stride * height * 4);
 
+	evas_object_image_data_update_add(image, 0, 0, width, height);
+	evas_object_image_alpha_set(image, evas_object_image_alpha_get(orig_image));
+
 	if(width > winwidth) {
 		zoom = 1.0 * width / winwidth;
 
@@ -152,8 +155,6 @@ void render_cur_image()
 		height = winheight;
 	}
 
-	evas_object_image_alpha_set(image, evas_object_image_alpha_get(orig_image));
-	evas_object_image_data_update_add(image, 0, 0, width, height);
 	evas_object_move(image, (winwidth - width) / 2, (winheight - height) / 2);
 	evas_object_resize(image, width, height);
 	evas_object_show(image);
@@ -196,20 +197,24 @@ void adjust_image()
 	char *p = evas_object_image_data_get(orig_image, EINA_FALSE);
 	char *_p = evas_object_image_data_get(image, EINA_TRUE);
 
+	Eina_Bool alpha = evas_object_image_alpha_get(orig_image);
+
 	for(int j = 0; j < h; j++) {
 		for(int i = 0; i < w; i++) {
-			if(!(R_VAL(p) == G_VAL(p) && G_VAL(p) == B_VAL(p))) {
-				c = Y_VAL(p);
+			if(!alpha || (int)*p) {
+				if(!(R_VAL(p) == G_VAL(p) && G_VAL(p) == B_VAL(p))) {
+					c = Y_VAL(p);
 
-				if(c < 0)
-					c = 0;
-				else if(c > 255)
-					c = 255;
-			} else {
-				c = R_VAL(p) & 0xff;
+					if(c < 0)
+						c = 0;
+					else if(c > 255)
+						c = 255;
+				} else {
+					c = R_VAL(p) & 0xff;
+				}
+
+				G_VAL(_p) = B_VAL(_p) = R_VAL(_p) = lut[c];
 			}
-
-			G_VAL(_p) = B_VAL(_p) = R_VAL(_p) = lut[c];
 
 			p += 4;
 			_p += 4;
