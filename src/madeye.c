@@ -471,6 +471,8 @@ int main(int argc, char *argv[])
 	evas_object_name_set(orig_image, "orig_image");
 	image = evas_object_image_filled_add(evas);
 	evas_object_name_set(image, "image");
+	evas_object_image_smooth_scale_set(image, EINA_TRUE);
+	evas_object_image_smooth_scale_set(orig_image, EINA_TRUE);
 	evas_object_image_load_size_set(orig_image, 600, 800);
 
 	read_keymap();
