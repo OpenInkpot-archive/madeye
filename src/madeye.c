@@ -101,8 +101,6 @@ static void die(const char* fmt, ...)
 
 static void main_win_resize_handler(Ecore_Evas* main_win)
 {
-	ecore_evas_hide(main_win);
-
 	int w, h;
 	Evas *canvas = ecore_evas_get(main_win);
 	evas_output_size_get(canvas, &w, &h);
