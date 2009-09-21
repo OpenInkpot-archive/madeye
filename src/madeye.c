@@ -34,7 +34,6 @@
 #include <Ecore_Evas.h>
 #include <Efreet_Mime.h>
 
-#include "madeye.h"
 #include "keyboard.h"
 
 Evas_Object *orig_image;
