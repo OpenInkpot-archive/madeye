@@ -111,7 +111,8 @@ static void main_win_resize_handler(Ecore_Evas* main_win)
 
 	Evas_Object *bg = evas_object_name_find(canvas, "background");
 	evas_object_resize(bg, w, h);
-	
+	evas_object_image_load_size_set(orig_image, w, h);
+
 	render_cur_image();
 
 	ecore_evas_show(main_win);
@@ -470,6 +471,9 @@ int main(int argc, char *argv[])
 	evas_object_name_set(orig_image, "orig_image");
 	image = evas_object_image_filled_add(evas);
 	evas_object_name_set(image, "image");
+	evas_object_image_smooth_scale_set(image, EINA_TRUE);
+	evas_object_image_smooth_scale_set(orig_image, EINA_TRUE);
+	evas_object_image_load_size_set(orig_image, 600, 800);
 
 	read_keymap();
 	init_filelist(argv[1]);
