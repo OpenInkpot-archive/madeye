@@ -1,5 +1,3 @@
-#include <Evas.h>
-#include <Efreet.h>
 #include <stdio.h>
 
 #include <Evas.h>
