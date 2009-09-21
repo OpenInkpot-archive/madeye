@@ -66,7 +66,7 @@ void dec_contrast();
 void toggle_dithering();
 void quit();
 
-struct _op operations[] = {
+_op operations[] = {
 	{ "NEXT_IMAGE", next_image },
 	{ "PREV_IMAGE", prev_image },
 	{ "INC_BRIGHTNESS", inc_brighness },
@@ -75,6 +75,7 @@ struct _op operations[] = {
 	{ "DEC_CONTRAST", dec_contrast },
 	{ "DITHER", toggle_dithering },
 	{ "RELOAD", render_cur_image },
+    { "QUIT", quit },
 	{ NULL, NULL},
 };
 
@@ -114,8 +115,11 @@ static void main_win_resize_handler(Ecore_Evas* main_win)
 	evas_object_image_load_size_set(orig_image, w, h);
 
 	render_cur_image();
+}
 
-	ecore_evas_show(main_win);
+static void main_win_delete_handler(Ecore_Evas* main_win)
+{
+    ecore_main_loop_quit();
 }
 
 void render_cur_image()
@@ -475,7 +479,7 @@ int main(int argc, char *argv[])
 	evas_object_image_smooth_scale_set(orig_image, EINA_TRUE);
 	evas_object_image_load_size_set(orig_image, 600, 800);
 
-	read_keymap();
+	read_keymap(operations);
 	init_filelist(argv[1]);
 	render_cur_image();
 
