@@ -55,6 +55,7 @@ int winheight = 800;
 
 int brightness_level = 0, contrast_level = 0;
 
+void floyd_steinberg_dither();
 void render_cur_image();
 void next_image();
 void prev_image();
