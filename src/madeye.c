@@ -455,6 +455,7 @@ int main(int argc, char *argv[])
 	ecore_evas_show(ee);
 
 	ecore_evas_callback_resize_set(ee, main_win_resize_handler);
+	ecore_evas_callback_delete_request_set(ee, main_win_delete_handler);
 
 	/* get a pointer our new Evas canvas */
 	Evas *evas = ecore_evas_get(ee);
