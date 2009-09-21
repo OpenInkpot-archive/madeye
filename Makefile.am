@@ -1,5 +1,4 @@
 SUBDIRS = src data
 
-install-data-hook:
-	$(mkdir_p) $(DESTDIR)$(xsession_dir)
-	$(INSTALL) -D madeye.desktop $(DESTDIR)/usr/share/applications/madeye.desktop
+desktopdir = $(datarootdir)/applications
+desktop_DATA = madeye.desktop
