@@ -1,4 +1,4 @@
 EXTRA_DIST = keymap.ini
 
-keymapdir = /usr/share/madeye
+keymapdir = $(datarootdir)/madeye
 keymap_DATA = keymap.ini
