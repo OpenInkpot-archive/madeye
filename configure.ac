@@ -5,7 +5,9 @@ AM_INIT_AUTOMAKE(foreign)
 AC_PROG_CC_C99
 PKG_PROG_PKG_CONFIG
 
-PKG_CHECK_MODULES(EFL,[ecore ecore-file evas ecore-evas efreet-mime])
+PKG_CHECK_MODULES(EFL,[ecore ecore-file evas ecore-evas efreet-mime edje])
 PKG_CHECK_MODULES(LIBKEYS,[libkeys])
+PKG_CHECK_MODULES(LIBEOI,[libeoi])
+PKG_CHECK_MODULES(LIBCHOICEBOX,[libchoicebox])
 
 AC_OUTPUT(Makefile src/Makefile data/Makefile)

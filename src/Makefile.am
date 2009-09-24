@@ -1,6 +1,6 @@
 bin_PROGRAMS = madeye
 madeye_SOURCES = madeye.c keyboard.c
 
-INCLUDES= $(all_includes) @EFL_CFLAGS@ @LIBKEYS_CFLAGS@
+INCLUDES= $(all_includes) @EFL_CFLAGS@ @LIBKEYS_CFLAGS@ @LIBEOI_CFLAGS@ @LIBCHOICEBOX_CFLAGS@
 
-madeye_LDFLAGS = $(all_libraries) @EFL_LIBS@ @LIBKEYS_LIBS@
+madeye_LDFLAGS = $(all_libraries) @EFL_LIBS@ @LIBKEYS_LIBS@ @LIBEOI_LIBS@ @LIBCHOICEBOX_LIBS@
