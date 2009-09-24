@@ -1,13 +1,60 @@
 #!/usr/bin/make -f
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/autotools.mk
+DEB_HOST_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-CFLAGS += -fvisibility=hidden
+CFLAGS= -g -fvisibility=hidden -Wall
 
-DEB_CONFIGURE_EXTRA_FLAGS := --disable-rpath --host=$(DEB_HOST_GNU_TYPE)
-DEB_MAKE_CLEAN_TARGET := clean
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
 
-clean::
-	autoreconf -fivs
-	./configure --prefix=/usr $(DEB_CONFIGURE_EXTRA_FLAGS)
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	CFLAGS="$(CFLAGS)" ./autogen.sh --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr
+	touch $@
+
+build: build-stamp
+build-stamp: configure
+	dh_testdir
+	$(MAKE)
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_clean
+	[ ! -f Makefile ] || $(MAKE) distclean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/madeye
+
+	mkdir -p $(CURDIR)/debian/madeye-settings-n516/etc/keys
+	install -m 0644 $(CURDIR)/data/madeye.n516.ini $(CURDIR)/debian/madeye-settings-n516/etc/keys/madeye.ini
+	
+	mkdir -p $(CURDIR)/debian/madeye/usr/share
+	cp -a $(CURDIR)/help $(CURDIR)/debian/madeye/usr/share
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_compress
+	dh_fixperms
+	dh_strip
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_builddeb
+
+binary-indep: build install
+
+binary: binary-arch binary-indep
+
+.PHONY: clean install build binary binary-arch binary-indep
