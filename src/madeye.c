@@ -502,7 +502,7 @@ int main(int argc, char *argv[])
         die("Unable to initialize Edje\n");
 
     setlocale(LC_ALL, "");
-    textdomain("usbwatcher");
+    textdomain("madeye");
 
     ecore_x_io_error_handler_set(exit_all, NULL);
 
