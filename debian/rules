@@ -42,6 +42,9 @@ install: build
 	mkdir -p $(CURDIR)/debian/madeye/usr/share
 	cp -a $(CURDIR)/help $(CURDIR)/debian/madeye/usr/share
 
+	mkdir -p $(CURDIR)/debian/madeye/usr/share/keys/help
+	cp -a $(CURDIR)/madeye_help.ini $(CURDIR)/debian/madeye/usr/share/keys/help/madeye.ini
+
 binary-arch: build install
 	dh_testdir
 	dh_testroot
