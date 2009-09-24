@@ -1,4 +1,4 @@
-EXTRA_DIST = keymap.ini
+EXTRA_DIST = madeye.ini
 
-keymapdir = $(datarootdir)/madeye
-keymap_DATA = keymap.ini
+keymapdir = $(datarootdir)/keys
+keymap_DATA = madeye.ini
