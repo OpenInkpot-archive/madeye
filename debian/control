@@ -1,13 +1,22 @@
 Source: madeye
 Section: media
 Maintainer: Alexander Kerner <lunohod@openinkpot.org>
-XCS-Cross-Host-Build-Depends: debhelper (>> 2.0.0), cdbs, cdbs-embedded, autoconf, automake, libtool, pkg-config
-XCS-Cross-Build-Depends: libevas-dev, libecore-dev, libefreet-dev, libkeys-dev
+XCS-Cross-Host-Build-Depends: debhelper (>> 2.0.0), autoconf, automake, libtool, pkg-config
+XCS-Cross-Build-Depends: libevas-dev, libecore-dev, libefreet-dev, libedje-dev, libkeys-dev, libchoicebox-dev, libeoi-dev
 Priority: optional
 Standards-Version: 3.6.2
 
 Package: madeye
 Architecture: any
 Depends: ${shlibs:Depends}
-Description: Image viewer
- Image viewer
+Description: Image viewer for e-Ink devices
+ madeye is and image viewer designed to be usable on devices with limited amount
+ of keys and slow screen refresh.
+
+Package: madeye-settings-n516
+Architecture: all
+Description: Image viewer for e-Ink devices -- N516 keymapping
+ madeye is an image viewer designed to be useable on devices with limited amount
+ of keys and slow screen refresh.
+ .
+ This package contains keymapping configuration file for Hanvon N516.
