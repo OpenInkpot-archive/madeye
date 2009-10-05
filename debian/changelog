@@ -2,7 +2,7 @@ madeye (0.1-12) UNRELEASED; urgency=low
 
   [Mikhail Gusarov]
   * Translations added: Bulgarian.
-  * .desktop translations added: Hungarian, Chinese, Bulgarian.
+  * .desktop translations added: Hungarian, Chinese, Bulgarian, Czech.
   * Help translations added: Polish.
 
  -- Mikhail Gusarov <dottedmag@dottedmag.net>  Mon, 05 Oct 2009 03:08:56 +0700
