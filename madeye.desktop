@@ -1,15 +1,12 @@
 [Desktop Entry]
 Name=madeye
-Name[pl]=madeye
-Name[ru]=madeye
 GenericName=Image viewer
 GenericName[bg]=Преглед на изображения
+GenericName[cs]=Prohlížeč obrázků
+GenericName[hu]=Képnézegető
 GenericName[pl]=Przeglądarka obrazów
 GenericName[ru]=Просмотр изображений
-Comment=Image viewer
-Comment[bg]=Преглед на изображения
-Comment[pl]=Przeglądarka obrazów
-Comment[ru]=Просмотр изображений
+GenericName[zh]=图片查看器
 TryExec=madeye
 Exec=madeye %F
 StartupNotify=true
