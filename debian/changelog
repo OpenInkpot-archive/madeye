@@ -1,7 +1,7 @@
-madeye (0.1-12) UNRELEASED; urgency=low
+madeye (0.1-12) asimov; urgency=low
 
   [Mikhail Gusarov]
-  * Translations added: Bulgarian.
+  * Translations added: Bulgarian, Italian.
   * .desktop translations added: Hungarian, Chinese, Bulgarian, Czech.
   * Help translations added: Polish.
 
