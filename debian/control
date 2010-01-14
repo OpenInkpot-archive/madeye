@@ -13,6 +13,16 @@ Description: Image viewer for e-Ink devices
  madeye is and image viewer designed to be usable on devices with limited amount
  of keys and slow screen refresh.
 
+Package: madeye-dbg
+Architecture: any
+Depends: ${shlibs:Depends}
+Section: debug
+Description: Image viewer for e-Ink devices -- debugging symbols
+ madeye is and image viewer designed to be usable on devices with limited amount
+ of keys and slow screen refresh.
+ .
+ This package contains debugging symbols.
+
 Package: madeye-settings-n516
 Architecture: all
 Description: Image viewer for e-Ink devices -- N516 keymapping

@@ -32,7 +32,6 @@ install: build
 
 	mkdir -p $(CURDIR)/debian/madeye-settings-n516/etc/keys
 	install -m 0644 $(CURDIR)/data/madeye.n516.ini $(CURDIR)/debian/madeye-settings-n516/etc/keys/madeye.ini
-	
 	mkdir -p $(CURDIR)/debian/madeye/usr/share
 	cp -a $(CURDIR)/help $(CURDIR)/debian/madeye/usr/share
 
@@ -42,9 +41,10 @@ install: build
 binary-arch: build install
 	dh_testdir
 	dh_testroot
+	dh_installdirs
 	dh_compress
 	dh_fixperms
-	dh_strip
+	dh_strip --dbg-package=madeye-dbg
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
