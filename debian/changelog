@@ -1,3 +1,13 @@
+madeye (0.1.16) zelazny; urgency=low
+
+  * Rebuild due to EFL update
+  * Translations added: Japanese.
+  * -dbg package added
+  * CFLAGS passed by dpkg-buildpackage are not touched
+  * Updated copyright information
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Thu, 14 Jan 2010 12:57:13 +0600
+
 madeye (0.1-15) asimov; urgency=low
 
   * Translations added: Belarusian.
