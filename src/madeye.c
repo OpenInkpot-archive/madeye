@@ -88,19 +88,19 @@ void adjust_image();
 void reload();
 
 _op operations[] = {
-    { "NEXT_IMAGE", next_image },
-    { "PREV_IMAGE", prev_image },
-    { "INC_BRIGHTNESS", inc_brighness },
-    { "DEC_BRIGHTNESS", dec_brighness },
-    { "INC_CONTRAST", inc_contrast },
-    { "DEC_CONTRAST", dec_contrast },
-    { "DITHER", toggle_dithering },
-    { "PRES_SET", toggle_pres_set },
-    { "FULLSCREEN", toggle_fullscreen },
-    { "RELOAD", reload },
-    { "HELP", show_help },
-    { "QUIT", quit },
-    { NULL, NULL},
+    {"NEXT_IMAGE", next_image},
+    {"PREV_IMAGE", prev_image},
+    {"INC_BRIGHTNESS", inc_brighness},
+    {"DEC_BRIGHTNESS", dec_brighness},
+    {"INC_CONTRAST", inc_contrast},
+    {"DEC_CONTRAST", dec_contrast},
+    {"DITHER", toggle_dithering},
+    {"PRES_SET", toggle_pres_set},
+    {"FULLSCREEN", toggle_fullscreen},
+    {"RELOAD", reload},
+    {"HELP", show_help},
+    {"QUIT", quit},
+    {NULL, NULL},
 };
 
 unsigned char lut[256];
@@ -110,11 +110,20 @@ unsigned char lut[256];
 #define B_VAL(__p__) *(__p__)
 #define Y_VAL(__p__) (0xff&((306*(0xff&(int)R_VAL(__p__)) + 601*(0xff&(int)G_VAL(__p__)) + 117*(0xff&(int)B_VAL(__p__)))/1024))
 
-void exit_all(void *param) { ecore_main_loop_quit(); }
+void
+exit_all(void *param)
+{
+    ecore_main_loop_quit();
+}
 
-void quit() { ecore_main_loop_quit(); }
+void
+quit()
+{
+    ecore_main_loop_quit();
+}
 
-static void die(const char* fmt, ...)
+static void
+die(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
@@ -123,14 +132,16 @@ static void die(const char* fmt, ...)
     exit(EXIT_FAILURE);
 }
 
-frame_t get_frame()
+frame_t
+get_frame()
 {
     frame_t f;
 
     Evas_Object *mw = evas_object_name_find(evas, "main-window");
-    if(evas_object_visible_get(mw)) {
+    if (evas_object_visible_get(mw)) {
         Evas_Object *e = evas_object_name_find(evas, "main-edje");
-        edje_object_part_geometry_get(e, "image-frame", &f.x, &f.y, &f.w, &f.h);
+        edje_object_part_geometry_get(e, "image-frame", &f.x, &f.y, &f.w,
+                                      &f.h);
 
         int x, y;
         edje_object_part_geometry_get(mw, "contents", &x, &y, NULL, NULL);
@@ -145,7 +156,8 @@ frame_t get_frame()
     return f;
 }
 
-static void main_win_resize_handler(Evas *canvas, int w, int h)
+static void
+main_win_resize_handler(Evas *canvas, int w, int h)
 {
     Evas_Object *mw = evas_object_name_find(canvas, "main-window");
     evas_object_resize(mw, w, h);
@@ -156,7 +168,8 @@ static void main_win_resize_handler(Evas *canvas, int w, int h)
     render_cur_image();
 }
 
-static void main_win_delete_handler(Ecore_Evas* main_win)
+static void
+main_win_delete_handler(Ecore_Evas *main_win)
 {
     ecore_main_loop_quit();
 }
@@ -173,8 +186,11 @@ draw_toggle_button(Evas_Object *gui, const char *button, bool state)
 static void
 draw_scale(const char *scale, int level)
 {
-    Evas_Object *o = edje_object_part_swallow_get(evas_object_name_find(evas, "main-window"), "contents");
-    if(!o)
+    Evas_Object *o =
+        edje_object_part_swallow_get(evas_object_name_find
+                                     (evas, "main-window"),
+                                     "contents");
+    if (!o)
         return;
 
     char *buf;
@@ -187,7 +203,9 @@ static void
 update_buttons()
 {
     Evas_Object *o =
-            edje_object_part_swallow_get(evas_object_name_find(evas, "main-window"), "contents");
+        edje_object_part_swallow_get(evas_object_name_find
+                                     (evas, "main-window"),
+                                     "contents");
 
     draw_toggle_button(o, "dither", dither);
     draw_toggle_button(o, "presset", preserve_settings);
@@ -196,7 +214,8 @@ update_buttons()
     draw_scale("contrast-level", contrast_level);
 }
 
-void reload()
+void
+reload()
 {
     brightness_level = 0;
     contrast_level = 0;
@@ -205,7 +224,8 @@ void reload()
     render_cur_image();
 }
 
-void render_cur_image()
+void
+render_cur_image()
 {
     double zoom = 1.0;
     int width, height;
@@ -219,13 +239,14 @@ void render_cur_image()
     evas_object_image_size_get(orig_image, &width, &height);
     int stride = evas_object_image_stride_get(orig_image);
 
-    if(dither)
+    if (dither)
         floyd_steinberg_dither();
 
     evas_object_image_size_set(image, width, height);
-    evas_object_image_alpha_set(image, evas_object_image_alpha_get(orig_image));
+    evas_object_image_alpha_set(image,
+                                evas_object_image_alpha_get(orig_image));
 
-    if(brightness_level || contrast_level)
+    if (brightness_level || contrast_level)
         adjust_image();
     else {
         char *s = evas_object_image_data_get(orig_image, EINA_FALSE);
@@ -235,52 +256,55 @@ void render_cur_image()
         evas_object_image_data_update_add(image, 0, 0, width, height);
     }
 
-    if(width > f.w) {
+    if (width > f.w) {
         zoom = 1.0 * width / f.w;
 
         width = f.w;
         height /= zoom;
     }
 
-    if(height > f.h) {
+    if (height > f.h) {
         zoom = 1.0 * height / f.h;
 
         width /= zoom;
         height = f.h;
     }
 
-    evas_object_move(image, f.x + (f.w - width) / 2, f.y + (f.h - height) / 2);
+    evas_object_move(image, f.x + (f.w - width) / 2,
+                     f.y + (f.h - height) / 2);
     evas_object_resize(image, width, height);
     evas_object_show(image);
 }
 
-void fill_lut()
+void
+fill_lut()
 {
     int x;
     float k;
 
-    if(contrast_level < 0) {
+    if (contrast_level < 0) {
         k = pow(1.1, -contrast_level);
-        k = 1/k;
-    } else if(contrast_level > 0)
+        k = 1 / k;
+    } else if (contrast_level > 0)
         k = pow(1.1, contrast_level);
     else
         k = 1;
 
-    for(int i = 0; i < 256; i++) {
+    for (int i = 0; i < 256; i++) {
         x = i + brightness_level * 25;
         x = x * k;
 
-        if(x < 0)
+        if (x < 0)
             x = 0;
-        else if(x > 255)
+        else if (x > 255)
             x = 255;
 
         lut[i] = x;
     }
 }
 
-void adjust_image()
+void
+adjust_image()
 {
     int w, h, stride;
 
@@ -293,15 +317,15 @@ void adjust_image()
 
     Eina_Bool alpha = evas_object_image_alpha_get(orig_image);
 
-    for(int j = 0; j < h; j++) {
-        for(int i = 0; i < w; i++) {
-            if(!alpha || (int)*p) {
-                if(!(R_VAL(p) == G_VAL(p) && G_VAL(p) == B_VAL(p))) {
+    for (int j = 0; j < h; j++) {
+        for (int i = 0; i < w; i++) {
+            if (!alpha || (int) *p) {
+                if (!(R_VAL(p) == G_VAL(p) && G_VAL(p) == B_VAL(p))) {
                     c = Y_VAL(p);
 
-                    if(c < 0)
+                    if (c < 0)
                         c = 0;
-                    else if(c > 255)
+                    else if (c > 255)
                         c = 255;
                 } else {
                     c = R_VAL(p) & 0xff;
@@ -320,9 +344,10 @@ void adjust_image()
     evas_object_image_data_update_add(image, 0, 0, w, h);
 }
 
-void inc_brighness()
+void
+inc_brighness()
 {
-    if(brightness_level > 5)
+    if (brightness_level > 5)
         return;
 
     brightness_level++;
@@ -333,9 +358,10 @@ void inc_brighness()
     adjust_image();
 }
 
-void dec_brighness()
+void
+dec_brighness()
 {
-    if(brightness_level < -5)
+    if (brightness_level < -5)
         return;
 
     brightness_level--;
@@ -344,9 +370,10 @@ void dec_brighness()
     adjust_image();
 }
 
-void inc_contrast()
+void
+inc_contrast()
 {
-    if(contrast_level > 5)
+    if (contrast_level > 5)
         return;
 
     contrast_level++;
@@ -355,9 +382,10 @@ void inc_contrast()
     adjust_image();
 }
 
-void dec_contrast()
+void
+dec_contrast()
 {
-    if(contrast_level < -5)
+    if (contrast_level < -5)
         return;
 
     contrast_level--;
@@ -371,22 +399,21 @@ update_footer()
 {
     unsigned int lsize = eina_list_count(filelist);
     file_t *f = eina_list_data_get(cur_file);
-    choicebox_aux_edje_footer_handler(
-            evas_object_name_find(evas, "main-window"),
-            "footer",
-            f->idx,
-            lsize);
+    choicebox_aux_edje_footer_handler(evas_object_name_find
+                                      (evas, "main-window"), "footer",
+                                      f->idx, lsize);
 }
 
-void next_image()
+void
+next_image()
 {
     cur_file = eina_list_next(cur_file);
-    if(!cur_file)
+    if (!cur_file)
         cur_file = filelist;
 
     update_footer();
 
-    if(!preserve_settings) {
+    if (!preserve_settings) {
         brightness_level = 0;
         contrast_level = 0;
         dither = false;
@@ -397,15 +424,16 @@ void next_image()
     render_cur_image();
 }
 
-void prev_image()
+void
+prev_image()
 {
     cur_file = eina_list_prev(cur_file);
-    if(!cur_file)
+    if (!cur_file)
         cur_file = eina_list_last(filelist);
 
     update_footer();
 
-    if(!preserve_settings) {
+    if (!preserve_settings) {
         brightness_level = 0;
         contrast_level = 0;
         dither = false;
@@ -416,7 +444,8 @@ void prev_image()
     render_cur_image();
 }
 
-void floyd_steinberg_dither()
+void
+floyd_steinberg_dither()
 {
     int w, h, stride;
 
@@ -434,12 +463,12 @@ void floyd_steinberg_dither()
     int quant_error;
 
     int factor = 255 / (8 - 1);
-    int factor_half = factor>>1;
+    int factor_half = factor >> 1;
 
     x = c;
     // convert first line to grayscale
-    for(int i = 0; i < w; i++) {
-        if(!(R_VAL(x) == G_VAL(x) && G_VAL(x) == B_VAL(x))) {
+    for (int i = 0; i < w; i++) {
+        if (!(R_VAL(x) == G_VAL(x) && G_VAL(x) == B_VAL(x))) {
             xi = Y_VAL(x);
             CHECK_BOUNDS(xi);
             G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
@@ -447,12 +476,12 @@ void floyd_steinberg_dither()
         x += 4;
     }
 
-    for(int j = 0; j < h; j++) {
-        x = c + (j+1) * stride * 4;
+    for (int j = 0; j < h; j++) {
+        x = c + (j + 1) * stride * 4;
 
         // convert next line to grayscale
-        for(int i = 0; j<(h-1) && i < w; i++) {
-            if(!(R_VAL(x) == G_VAL(x) && G_VAL(x) == B_VAL(x))) {
+        for (int i = 0; j < (h - 1) && i < w; i++) {
+            if (!(R_VAL(x) == G_VAL(x) && G_VAL(x) == B_VAL(x))) {
                 xi = Y_VAL(x);
                 CHECK_BOUNDS(xi);
                 G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
@@ -460,10 +489,10 @@ void floyd_steinberg_dither()
             x += 4;
         }
 
-        for(int i = 0; i < w; i++) {
+        for (int i = 0; i < w; i++) {
             x = c + j * stride * 4 + i * 4;
 
-            oldpixel = 0xff & (int)R_VAL(x);
+            oldpixel = 0xff & (int) R_VAL(x);
 
             newpixel = (oldpixel + factor_half) / factor;
             newpixel *= factor;
@@ -472,33 +501,33 @@ void floyd_steinberg_dither()
 
             quant_error = oldpixel - newpixel;
 
-            if(i < w - 1) {
+            if (i < w - 1) {
                 x += 4;
-                xi = R_VAL(x); 
+                xi = R_VAL(x);
                 xi = xi + 7 * quant_error / 16;
                 CHECK_BOUNDS(xi);
                 G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
             }
 
-            x = c + (j+1) * stride * 4 + (i - 1) * 4;
+            x = c + (j + 1) * stride * 4 + (i - 1) * 4;
 
-            if(j < h - 1) {
-                if(i > 0) {
-                    xi = R_VAL(x); 
+            if (j < h - 1) {
+                if (i > 0) {
+                    xi = R_VAL(x);
                     xi = xi + 3 * quant_error / 16;
                     CHECK_BOUNDS(xi);
                     G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
                 }
 
                 x += 4;
-                xi = R_VAL(x); 
+                xi = R_VAL(x);
                 xi = xi + 5 * quant_error / 16;
                 CHECK_BOUNDS(xi);
                 G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
 
-                if(i < w - 1) {
+                if (i < w - 1) {
                     x += 4;
-                    xi = R_VAL(x); 
+                    xi = R_VAL(x);
                     xi = xi + quant_error / 16;
                     CHECK_BOUNDS(xi);
                     G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
@@ -510,11 +539,12 @@ void floyd_steinberg_dither()
     evas_object_image_data_update_add(orig_image, 0, 0, w, h);
 }
 
-void toggle_fullscreen()
+void
+toggle_fullscreen()
 {
     Evas_Object *mw = evas_object_name_find(evas, "main-window");
 
-    if(evas_object_visible_get(mw))
+    if (evas_object_visible_get(mw))
         evas_object_hide(mw);
     else
         evas_object_show(mw);
@@ -522,27 +552,31 @@ void toggle_fullscreen()
     render_cur_image();
 }
 
-void toggle_pres_set()
+void
+toggle_pres_set()
 {
     preserve_settings = !preserve_settings;
 
-    draw_toggle_button(
-            edje_object_part_swallow_get(evas_object_name_find(evas, "main-window"), "contents"),
-            "presset", preserve_settings);
+    draw_toggle_button(edje_object_part_swallow_get
+                       (evas_object_name_find(evas, "main-window"),
+                        "contents"), "presset", preserve_settings);
 }
 
 
-void toggle_dithering()
+void
+toggle_dithering()
 {
     dither = !dither;
-    draw_toggle_button(
-            edje_object_part_swallow_get(evas_object_name_find(evas, "main-window"), "contents"),
-            "dither", dither);
+
+    draw_toggle_button(edje_object_part_swallow_get
+                       (evas_object_name_find(evas, "main-window"),
+                        "contents"), "dither", dither);
 
     render_cur_image();
 }
 
-void init_filelist(const char *file)
+void
+init_filelist(const char *file)
 {
     char filename[1024];
     char *f;
@@ -560,22 +594,24 @@ void init_filelist(const char *file)
         snprintf(filename, 1024, "%s/%s", path, f);
         free(f);
 
-        if(ecore_file_is_dir(filename))
+        if (ecore_file_is_dir(filename))
             continue;
 
         const char *mime_type = efreet_mime_type_get(filename);
-        if(!mime_type)
+        if (!mime_type)
             continue;
 
-        for(char **t = supported_types; t && *t; t++)
-            if(!strncmp(mime_type, *t, strlen(*t))) {
-                file_t *fdata = (file_t*)malloc(sizeof(file_t));
+        for (char **t = supported_types; t && *t; t++)
+            if (!strncmp(mime_type, *t, strlen(*t))) {
+                file_t *fdata = (file_t *) malloc(sizeof(file_t));
                 fdata->filename = strdup(filename);
                 fdata->idx = idx++;
 
                 filelist = eina_list_append(filelist, fdata);
 
-                if(!cur_file && !strncmp(file, ecore_file_file_get(filename), strlen(file))) {
+                if (!cur_file
+                    && !strncmp(file, ecore_file_file_get(filename),
+                                strlen(file))) {
                     cur_file = eina_list_last(filelist);
                     curidx = fdata->idx;
                 }
@@ -594,34 +630,32 @@ void init_filelist(const char *file)
     efreet_mime_shutdown();
 }
 
-void show_help()
+void
+show_help()
 {
     eoi_help_show(evas,
-            "madeye",
-            "index",
-            gettext("Madeye: Help"),
-            NULL,
-            NULL);
+                  "madeye", "index", gettext("Madeye: Help"), NULL, NULL);
 }
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
     if (argc == 1) {
-        fprintf(stderr,"no image file given!\n");
+        fprintf(stderr, "no image file given!\n");
         return 1;
     }
 
     Ecore_Evas *ee;
-    Evas_Object *bg; //background
+    Evas_Object *bg;            //background
 
     /* initialize our libraries */
-    if(!evas_init())
+    if (!evas_init())
         die("Unable to initialize Evas\n");
-    if(!ecore_init())
+    if (!ecore_init())
         die("Unable to initialize Ecore\n");
-    if(!ecore_evas_init())
+    if (!ecore_evas_init())
         die("Unable to initialize Evas\n");
-    if(!edje_init())
+    if (!edje_init())
         die("Unable to initialize Edje\n");
 
     setlocale(LC_ALL, "");
@@ -661,9 +695,10 @@ int main(int argc, char *argv[])
     evas_object_show(mw);
 
     evas_object_focus_set(mw, true);
-    evas_object_event_callback_add(mw, EVAS_CALLBACK_KEY_UP, &key_handler, NULL);
+    evas_object_event_callback_add(mw, EVAS_CALLBACK_KEY_UP, &key_handler,
+                                   NULL);
 
-    Evas_Object* r = evas_object_rectangle_add(evas);
+    Evas_Object *r = evas_object_rectangle_add(evas);
     evas_object_color_set(r, 0, 0, 255, 255);
     evas_object_show(r);
 
