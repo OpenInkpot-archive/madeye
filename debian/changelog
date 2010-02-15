@@ -1,3 +1,9 @@
+madeye (0.1.17) zelazny; urgency=low
+
+  * New gui. Part 1.
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Mon, 15 Feb 2010 23:42:57 +0100
+
 madeye (0.1.16) zelazny; urgency=low
 
   * Rebuild due to EFL update
