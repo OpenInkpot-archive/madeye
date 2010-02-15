@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2009 Marc Lajoie <quickhand@openinkpot.org>
  * Copyright (C) 2009 Tomasz Długosz <tomek3dgmail.com>
- * Copyright (C) 2009 Alexander Kerner <lunohod@openinkpot.org>
+ * Copyright (C) 2009, 2010 Alexander Kerner <lunohod@openinkpot.org>
  * Copyright © 2009 Mikhail Gusarov <dottedmag@dottedmag.net>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,7 @@
 #include <config.h>
 #endif
 
+#define _GNU_SOURCE
 #include <string.h>
 #include <stdbool.h>
 #include <math.h>
@@ -46,7 +47,6 @@
 Evas *evas;
 Evas_Object *orig_image;
 Evas_Object *image;
-bool dither = false;
 
 Eina_List *filelist;
 Eina_List *cur_file;
@@ -58,10 +58,18 @@ char *supported_types[] = {
     NULL
 };
 
-int winwidth = 600;
-int winheight = 800;
+typedef struct frame {
+    int x, y, w, h;
+} frame_t;
+
+typedef struct file {
+    const char *filename;
+    unsigned int idx;
+} file_t;
 
 int brightness_level = 0, contrast_level = 0;
+bool preserve_settings = true;
+bool dither = false;
 
 void floyd_steinberg_dither();
 void render_cur_image();
@@ -72,8 +80,12 @@ void dec_brighness();
 void inc_contrast();
 void dec_contrast();
 void toggle_dithering();
+void toggle_fullscreen();
+void toggle_pres_set();
 void show_help();
 void quit();
+void adjust_image();
+void reload();
 
 _op operations[] = {
     { "NEXT_IMAGE", next_image },
@@ -83,7 +95,9 @@ _op operations[] = {
     { "INC_CONTRAST", inc_contrast },
     { "DEC_CONTRAST", dec_contrast },
     { "DITHER", toggle_dithering },
-    { "RELOAD", render_cur_image },
+    { "PRES_SET", toggle_pres_set },
+    { "FULLSCREEN", toggle_fullscreen },
+    { "RELOAD", reload },
     { "HELP", show_help },
     { "QUIT", quit },
     { NULL, NULL},
@@ -109,23 +123,37 @@ static void die(const char* fmt, ...)
     exit(EXIT_FAILURE);
 }
 
-static void main_win_resize_handler(Ecore_Evas* main_win)
+frame_t get_frame()
 {
-    int w, h;
-    Evas *canvas = ecore_evas_get(main_win);
-    evas_output_size_get(canvas, &w, &h);
+    frame_t f;
 
-    winwidth = w;
-    winheight = h;
+    Evas_Object *mw = evas_object_name_find(evas, "main-window");
+    if(evas_object_visible_get(mw)) {
+        Evas_Object *e = evas_object_name_find(evas, "main-edje");
+        edje_object_part_geometry_get(e, "image-frame", &f.x, &f.y, &f.w, &f.h);
+
+        int x, y;
+        edje_object_part_geometry_get(mw, "contents", &x, &y, NULL, NULL);
+        f.x += x;
+        f.y += y;
+    } else {
+        f.x = 0;
+        f.y = 0;
+        evas_output_size_get(evas, &f.w, &f.h);
+    }
+
+    return f;
+}
+
+static void main_win_resize_handler(Evas *canvas, int w, int h)
+{
+    Evas_Object *mw = evas_object_name_find(canvas, "main-window");
+    evas_object_resize(mw, w, h);
 
     Evas_Object *bg = evas_object_name_find(canvas, "background");
     evas_object_resize(bg, w, h);
-    evas_object_image_load_size_set(orig_image, w, h);
 
     render_cur_image();
-
-    Evas_Object* rr = evas_object_name_find(evas, "help-window");
-    evas_object_resize(rr, w, h);
 }
 
 static void main_win_delete_handler(Ecore_Evas* main_win)
@@ -133,15 +161,61 @@ static void main_win_delete_handler(Ecore_Evas* main_win)
     ecore_main_loop_quit();
 }
 
+static void
+draw_toggle_button(Evas_Object *gui, const char *button, bool state)
+{
+    char *buf;
+    asprintf(&buf, "%s,%s", button, state ? "pressed" : "default");
+    edje_object_signal_emit(gui, buf, "");
+    free(buf);
+}
+
+static void
+draw_scale(const char *scale, int level)
+{
+    Evas_Object *o = edje_object_part_swallow_get(evas_object_name_find(evas, "main-window"), "contents");
+    if(!o)
+        return;
+
+    char *buf;
+    asprintf(&buf, "%s,%d", scale, level);
+    edje_object_signal_emit(o, buf, "");
+    free(buf);
+}
+
+static void
+update_buttons()
+{
+    Evas_Object *o =
+            edje_object_part_swallow_get(evas_object_name_find(evas, "main-window"), "contents");
+
+    draw_toggle_button(o, "dither", dither);
+    draw_toggle_button(o, "presset", preserve_settings);
+
+    draw_scale("brightness-level", brightness_level);
+    draw_scale("contrast-level", contrast_level);
+}
+
+void reload()
+{
+    brightness_level = 0;
+    contrast_level = 0;
+    dither = false;
+    update_buttons();
+    render_cur_image();
+}
+
 void render_cur_image()
 {
     double zoom = 1.0;
     int width, height;
 
-    brightness_level = 0;
-    contrast_level = 0;
+    frame_t f = get_frame();
 
-    evas_object_image_file_set(orig_image, eina_list_data_get(cur_file), NULL);
+    evas_object_image_load_size_set(orig_image, f.w, f.h);
+
+    file_t *file = eina_list_data_get(cur_file);
+    evas_object_image_file_set(orig_image, file->filename, NULL);
     evas_object_image_size_get(orig_image, &width, &height);
     int stride = evas_object_image_stride_get(orig_image);
 
@@ -149,29 +223,33 @@ void render_cur_image()
         floyd_steinberg_dither();
 
     evas_object_image_size_set(image, width, height);
-
-    char *s = evas_object_image_data_get(orig_image, EINA_FALSE);
-    char *t = evas_object_image_data_get(image, EINA_TRUE);
-    memcpy(t, s, stride * height * 4);
-
-    evas_object_image_data_update_add(image, 0, 0, width, height);
     evas_object_image_alpha_set(image, evas_object_image_alpha_get(orig_image));
 
-    if(width > winwidth) {
-        zoom = 1.0 * width / winwidth;
+    if(brightness_level || contrast_level)
+        adjust_image();
+    else {
+        char *s = evas_object_image_data_get(orig_image, EINA_FALSE);
+        char *t = evas_object_image_data_get(image, EINA_TRUE);
+        memcpy(t, s, stride * height * 4);
 
-        width = winwidth;
+        evas_object_image_data_update_add(image, 0, 0, width, height);
+    }
+
+    if(width > f.w) {
+        zoom = 1.0 * width / f.w;
+
+        width = f.w;
         height /= zoom;
     }
 
-    if(height > winheight) {
-        zoom = 1.0 * height / winheight;
+    if(height > f.h) {
+        zoom = 1.0 * height / f.h;
 
         width /= zoom;
-        height = winheight;
+        height = f.h;
     }
 
-    evas_object_move(image, (winwidth - width) / 2, (winheight - height) / 2);
+    evas_object_move(image, f.x + (f.w - width) / 2, f.y + (f.h - height) / 2);
     evas_object_resize(image, width, height);
     evas_object_show(image);
 }
@@ -248,6 +326,9 @@ void inc_brighness()
         return;
 
     brightness_level++;
+
+    draw_scale("brightness-level", brightness_level);
+
     fill_lut();
     adjust_image();
 }
@@ -258,6 +339,7 @@ void dec_brighness()
         return;
 
     brightness_level--;
+    draw_scale("brightness-level", brightness_level);
     fill_lut();
     adjust_image();
 }
@@ -268,6 +350,7 @@ void inc_contrast()
         return;
 
     contrast_level++;
+    draw_scale("contrast-level", contrast_level);
     fill_lut();
     adjust_image();
 }
@@ -278,8 +361,21 @@ void dec_contrast()
         return;
 
     contrast_level--;
+    draw_scale("contrast-level", contrast_level);
     fill_lut();
     adjust_image();
+}
+
+static void
+update_footer()
+{
+    unsigned int lsize = eina_list_count(filelist);
+    file_t *f = eina_list_data_get(cur_file);
+    choicebox_aux_edje_footer_handler(
+            evas_object_name_find(evas, "main-window"),
+            "footer",
+            f->idx,
+            lsize);
 }
 
 void next_image()
@@ -287,6 +383,16 @@ void next_image()
     cur_file = eina_list_next(cur_file);
     if(!cur_file)
         cur_file = filelist;
+
+    update_footer();
+
+    if(!preserve_settings) {
+        brightness_level = 0;
+        contrast_level = 0;
+        dither = false;
+
+        update_buttons();
+    }
 
     render_cur_image();
 }
@@ -296,6 +402,16 @@ void prev_image()
     cur_file = eina_list_prev(cur_file);
     if(!cur_file)
         cur_file = eina_list_last(filelist);
+
+    update_footer();
+
+    if(!preserve_settings) {
+        brightness_level = 0;
+        contrast_level = 0;
+        dither = false;
+
+        update_buttons();
+    }
 
     render_cur_image();
 }
@@ -394,9 +510,35 @@ void floyd_steinberg_dither()
     evas_object_image_data_update_add(orig_image, 0, 0, w, h);
 }
 
+void toggle_fullscreen()
+{
+    Evas_Object *mw = evas_object_name_find(evas, "main-window");
+
+    if(evas_object_visible_get(mw))
+        evas_object_hide(mw);
+    else
+        evas_object_show(mw);
+
+    render_cur_image();
+}
+
+void toggle_pres_set()
+{
+    preserve_settings = !preserve_settings;
+
+    draw_toggle_button(
+            edje_object_part_swallow_get(evas_object_name_find(evas, "main-window"), "contents"),
+            "presset", preserve_settings);
+}
+
+
 void toggle_dithering()
 {
     dither = !dither;
+    draw_toggle_button(
+            edje_object_part_swallow_get(evas_object_name_find(evas, "main-window"), "contents"),
+            "dither", dither);
+
     render_cur_image();
 }
 
@@ -405,6 +547,7 @@ void init_filelist(const char *file)
     char filename[1024];
     char *f;
     Eina_List *l;
+    int idx = 0, curidx = 0;
 
     char *path = ecore_file_dir_get(file);
     file = ecore_file_file_get(file);
@@ -426,10 +569,16 @@ void init_filelist(const char *file)
 
         for(char **t = supported_types; t && *t; t++)
             if(!strncmp(mime_type, *t, strlen(*t))) {
-                filelist = eina_list_append(filelist, strdup(filename));
+                file_t *fdata = (file_t*)malloc(sizeof(file_t));
+                fdata->filename = strdup(filename);
+                fdata->idx = idx++;
 
-                if(!cur_file && !strncmp(file, ecore_file_file_get(filename), strlen(file)))
+                filelist = eina_list_append(filelist, fdata);
+
+                if(!cur_file && !strncmp(file, ecore_file_file_get(filename), strlen(file))) {
                     cur_file = eina_list_last(filelist);
+                    curidx = fdata->idx;
+                }
 
                 break;
             }
@@ -437,49 +586,22 @@ void init_filelist(const char *file)
 
     eina_list_free(ls);
 
+    curidx = idx - curidx;
+    file_t *fdata;
+    EINA_LIST_FOREACH(filelist, l, fdata)
+        fdata->idx = (fdata->idx + curidx) % idx;
+
     efreet_mime_shutdown();
-}
-
-static void help_closed()
-{
-    Evas_Object* rr = evas_object_name_find(evas, "help-window");
-    evas_object_hide(rr);
-    evas_object_del(rr);
-
-    Evas_Object* bg = evas_object_name_find(evas, "background");
-    evas_object_focus_set(bg, 1);
-}
-
-static void page_updated_handler(Evas_Object* tb,
-        int cur_page,
-        int total_pages,
-        const char* header,
-        void* param)
-{
-    Evas_Object* rr = evas_object_name_find(evas, "help-window");
-    choicebox_aux_edje_footer_handler(rr, "footer", cur_page, total_pages);
 }
 
 void show_help()
 {
-    Evas_Object* rr = eoi_main_window_create(evas);
-
-    edje_object_part_text_set(rr, "title", gettext("Madeye: Help"));
-    edje_object_part_text_set(rr, "footer", "0/0");
-
-    evas_object_name_set(rr, "help-window");
-    evas_object_move(rr, 0, 0);
-    int w, h;
-    evas_output_size_get(evas, &w, &h);
-    evas_object_resize(rr, w, h);
-    evas_object_show(rr);
-
-    Evas_Object *help = eoi_help_new(evas, "madeye", page_updated_handler, help_closed);
-    evas_object_name_set(help, "help-widget");
-    evas_object_show(help);
-
-    edje_object_part_swallow(rr, "contents", help);
-    evas_object_focus_set(help, 1);
+    eoi_help_show(evas,
+            "madeye",
+            "index",
+            gettext("Madeye: Help"),
+            NULL,
+            NULL);
 }
 
 int main(int argc, char *argv[])
@@ -514,11 +636,11 @@ int main(int argc, char *argv[])
     ecore_evas_title_set(ee, "madEYE");
     ecore_evas_show(ee);
 
-    ecore_evas_callback_resize_set(ee, main_win_resize_handler);
     ecore_evas_callback_delete_request_set(ee, main_win_delete_handler);
 
     /* get a pointer our new Evas canvas */
     evas = ecore_evas_get(ee);
+    eoi_evas_resize_callback_add(evas, main_win_resize_handler);
 
     /* create our white background */
     bg = evas_object_rectangle_add(evas);
@@ -526,20 +648,43 @@ int main(int argc, char *argv[])
     evas_object_move(bg, 0, 0);
     evas_object_resize(bg, 600, 800);
     evas_object_name_set(bg, "background");
-    evas_object_focus_set(bg, 1);
-    evas_object_event_callback_add(bg, EVAS_CALLBACK_KEY_UP, &key_handler, NULL);
     evas_object_show(bg);
+
+    Evas_Object *mw = eoi_main_window_create(evas);
+
+    edje_object_part_text_set(mw, "title", "Madeye");
+    edje_object_part_text_set(mw, "footer", "0/0");
+
+    evas_object_name_set(mw, "main-window");
+    evas_object_move(mw, 0, 0);
+    evas_object_resize(mw, 600, 800);
+    evas_object_show(mw);
+
+    evas_object_focus_set(mw, true);
+    evas_object_event_callback_add(mw, EVAS_CALLBACK_KEY_UP, &key_handler, NULL);
+
+    Evas_Object* r = evas_object_rectangle_add(evas);
+    evas_object_color_set(r, 0, 0, 255, 255);
+    evas_object_show(r);
+
+    Evas_Object *e = edje_object_add(evas);
+    evas_object_name_set(e, "main-edje");
+    edje_object_file_set(e, THEME_DIR "/madeye.edj", "main_edje");
+    edje_object_part_swallow(mw, "contents", e);
 
     orig_image = evas_object_image_filled_add(evas);
     evas_object_name_set(orig_image, "orig_image");
+
     image = evas_object_image_filled_add(evas);
     evas_object_name_set(image, "image");
     evas_object_image_smooth_scale_set(image, EINA_TRUE);
     evas_object_image_smooth_scale_set(orig_image, EINA_TRUE);
-    evas_object_image_load_size_set(orig_image, 600, 800);
+    evas_object_show(image);
 
     read_keymap(operations);
     init_filelist(argv[1]);
+    update_buttons();
+    update_footer();
     render_cur_image();
 
     /* start the main event loop */

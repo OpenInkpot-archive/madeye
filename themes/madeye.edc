@@ -1,0 +1,262 @@
+images {
+    image: "background.png" COMP;
+    image: "camera_pic.png" COMP;
+    image: "button.png" COMP;
+    image: "doublebutton.png" COMP;
+    image: "dithering_on.png" COMP;
+    image: "dithering_off.png" COMP;
+    image: "apply-to-all-images.png" COMP;
+    image: "apply-to-this-image.png" COMP;
+    image: "brightness.png" COMP;
+    image: "contrast.png" COMP;
+    image: "scale_empty.png" COMP;
+    image: "scale_1.png" COMP;
+    image: "scale_2.png" COMP;
+    image: "scale_3.png" COMP;
+    image: "scale_4.png" COMP;
+    image: "scale_5.png" COMP;
+    image: "scale_6.png" COMP;
+    image: "scale_empty_180.png" COMP;
+    image: "scale_1_180.png" COMP;
+    image: "scale_2_180.png" COMP;
+    image: "scale_3_180.png" COMP;
+    image: "scale_4_180.png" COMP;
+    image: "scale_5_180.png" COMP;
+    image: "scale_6_180.png" COMP;
+}
+
+#define BUTTON(_name_, _x_, _y_) \
+    _BUTTON(_name_, "button.png", _x_, _y_, 68, 77)
+
+#define DBUTTON(_name_, _x_, _y_)        \
+    _BUTTON(_name_, "doublebutton.png", _x_, _y_, 68, 154)
+
+#define _BUTTON(_name_, _image_, _x_, _y_, _w_, _h_)        \
+    part {		\
+        name, _name_;		\
+        type, IMAGE;		\
+        mouse_events, 0;		\
+        description {		\
+            state, "default" 0.0;		\
+            rel1 { relative, 0.0 0.0; offset, _x_ _y_; }		\
+            rel2 { relative, 0.0 0.0; offset, (_x_+_w_) (_y_+_h_); }		\
+            image { normal, _image_; }		\
+        }		\
+    }
+
+#define BUTTON_IMAGE(n, b, i) \
+    part { \
+        name, n; \
+        type, IMAGE; \
+        mouse_events, 0; \
+        description { \
+            state, "default" 0.0; \
+            rel1 { relative, 0.0 0.0; offset, 0 0; to, b; } \
+            rel2 { relative, 1.0 1.0; offset, -1 -1; to, b; } \
+            image { normal, i; } \
+        } \
+    }
+
+#define BUTTON_TOGGLE_IMAGE(n, b, image1, image2) \
+    part { \
+        name, n; \
+        type, IMAGE; \
+        mouse_events, 0; \
+        description { \
+            state, "default" 0.0; \
+            rel1 { relative, 0.0 0.0; offset, 0 0; to, b; } \
+            rel2 { relative, 1.0 1.0; offset, -1 -1; to, b; } \
+            image { normal, image1; } \
+        } \
+        description { \
+            state, "pressed" 0.0; \
+            inherit, "default" 0.0; \
+            image { normal, image2; } \
+        } \
+    }
+
+#define BUTTON_PROG(name1, signal_name)           \
+            program {                                       \
+                name, name1;                                \
+                signal, signal_name;                        \
+                                                            \
+                script {                                    \
+                    new name_arg[100], name[100];           \
+                    getsarg(0, name_arg, 100);              \
+                    strcut(name, name_arg, strlen(signal_name)-1, 100);  \
+                                                            \
+                    set_state(PART:name1, name, 0.0);       \
+                }                                           \
+            }
+
+#define STR(x) #x
+#define SCALE_STATE(s) \
+                description {	\
+                    state, STR(s) 0.0;	\
+                    inherit, "default" 0.0;	\
+                    image { normal, "scale_"STR(s)".png"; }	\
+                }
+
+#define SCALE_STATE_180(s) \
+                description {	\
+                    state, STR(s) 0.0;	\
+                    inherit, "default" 0.0;	\
+                    image { normal, "scale_"STR(s)"_180.png"; }	\
+                }
+
+#define SCALE(n) \
+            part {	\
+                name, n"-scale-1";	\
+                type, IMAGE;	\
+                mouse_events, 0;	\
+                description {	\
+                    state, "default" 0.0;	\
+                    min, 20 48;	\
+                    max, 20 48;	\
+                    rel1 { relative, 0.0 0.0; offset, 0 15; to, n"-button"; }	\
+                    rel2 { relative, 1.0 0.5; offset, -1 -15; to, n"-button"; }	\
+                    image { normal, "scale_empty.png"; }	\
+                }	\
+                SCALE_STATE(1) \
+                SCALE_STATE(2) \
+                SCALE_STATE(3) \
+                SCALE_STATE(4) \
+                SCALE_STATE(5) \
+                SCALE_STATE(6) \
+            }	\
+            part {	\
+                name, n"-scale-2";	\
+                type, IMAGE;	\
+                mouse_events, 0;	\
+                description {	\
+                    state, "default" 0.0;	\
+                    min, 20 48;	\
+                    max, 20 48;	\
+                    rel1 { relative, 1.0 1.0; offset, -1 -15; to, n"-button"; }	\
+                    rel2 { relative, 0.0 0.5; offset, 0 15; to, n"-button"; }	\
+                    image { normal, "scale_empty_180.png"; }	\
+                }	\
+                SCALE_STATE_180(1) \
+                SCALE_STATE_180(2) \
+                SCALE_STATE_180(3) \
+                SCALE_STATE_180(4) \
+                SCALE_STATE_180(5) \
+                SCALE_STATE_180(6) \
+            }	\
+            program {	\
+                name, n"-level";	\
+                signal, n"-level,*";	\
+	\
+                script {	\
+                    new level_arg[100];	\
+                    getsarg(0, level_arg, 100);	\
+                    new level_s[100];	\
+                    strcut(level_s, level_arg, strlen(n"-level,"), 100);	\
+                    new level = atoi(level_s);	\
+	\
+                    if(level == 0) {	\
+                        set_state(PART:n"-scale-1", "default", 0.0);	\
+                        set_state(PART:n"-scale-2", "default", 0.0);	\
+                    } else {	\
+                        if(level > 6)	\
+                            level = 6;	\
+                        if(level < -6)	\
+                            level = -6;	\
+	\
+                        new l = level;	\
+                        if(l < 0)	\
+                            l = 0 - l;	\
+                        snprintf(level_s, 100, "%d", l);	\
+	\
+                        if(level > 0) {	\
+                            set_state(PART:n"-scale-1", level_s, 0.0);	\
+                            set_state(PART:n"-scale-2", "default", 0.0);	\
+                        } else {	\
+                            set_state(PART:n"-scale-2", level_s, 0.0);	\
+                            set_state(PART:n"-scale-1", "default", 0.0);	\
+                        }	\
+                    }	\
+                }	\
+            }
+
+collections {
+    group {
+        name, "main_edje";
+        parts {
+            part {
+                name, "background_1";
+                type, RECT;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    rel1 { relative, 0.0 0.0; offset, 0 0; }
+                    rel2 { relative, 1.0 1.0; offset, -1 -1; }
+                }
+            }
+            part {
+                name, "background_2";
+                type, IMAGE;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    rel1 { relative, 0.0 0.0; offset, 1 1; }
+                    rel2 { relative, 1.0 1.0; offset, -2 -2; }
+                    fill { 
+                        origin { relative, 0.0 0.0; }
+                        size { relative, 0.0 0.0; offset, 600 14; } }
+                    image { normal, "background.png"; }
+                }
+            }
+            part {
+                name, "frame";
+                type, RECT;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 0 0 0 255;
+                    rel1 { relative, 0.0 0.0; offset, 113 11; }
+                    rel2 { relative, 1.0 0.0; offset, -24 597; }
+                }
+            }
+            part {
+                name, "image-frame";
+                type, RECT;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 204 204 204 255;
+                    rel1 { relative, 0.0 0.0; offset, 1 1; to, "frame"; }
+                    rel2 { relative, 1.0 1.0; offset, -2 -2; to, "frame"; }
+                }
+            }
+            part {
+                name, "camera";
+                type, IMAGE;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    rel1 { relative, 1.0 1.0; offset, -219 -104; }
+                    rel2 { relative, 1.0 1.0; offset, -2 -2; }
+                    image { normal, "camera_pic.png"; }
+                }
+            }
+
+            DBUTTON("brightness-button", 1, 1)
+            BUTTON_IMAGE("brightness-image", "brightness-button", "brightness.png")
+            SCALE("brightness")
+
+            DBUTTON("contrast-button", 1, 155)
+            BUTTON_IMAGE("contrast-image", "contrast-button", "contrast.png")
+            SCALE("contrast")
+
+            BUTTON("dither-button", 1, 310)
+            BUTTON_TOGGLE_IMAGE("dither", "dither-button", "dithering_off.png", "dithering_on.png")
+            BUTTON_PROG("dither", "dither,*")
+
+            BUTTON("presset-button", 1, 388)
+            BUTTON_TOGGLE_IMAGE("presset", "presset-button", "apply-to-this-image.png", "apply-to-all-images.png")
+            BUTTON_PROG("presset", "presset,*")
+        }
+    }
+}
