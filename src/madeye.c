@@ -157,8 +157,9 @@ get_frame()
 }
 
 static void
-main_win_resize_handler(Evas *canvas, int w, int h)
+main_win_resize_handler(Ecore_Evas *ee, int w, int h, void *param)
 {
+    Evas *canvas = ecore_evas_get(ee);
     Evas_Object *mw = evas_object_name_find(canvas, "main-window");
     evas_object_resize(mw, w, h);
 
@@ -671,10 +672,10 @@ main(int argc, char *argv[])
     ecore_evas_show(ee);
 
     ecore_evas_callback_delete_request_set(ee, main_win_delete_handler);
+    eoi_resize_callback_add(ee, main_win_resize_handler, NULL);
 
     /* get a pointer our new Evas canvas */
     evas = ecore_evas_get(ee);
-    eoi_evas_resize_callback_add(evas, main_win_resize_handler);
 
     /* create our white background */
     bg = evas_object_rectangle_add(evas);
