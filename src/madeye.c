@@ -115,8 +115,10 @@ unsigned char lut[256];
 #define B_VAL(__p__) *(__p__)
 #define Y_VAL(__p__) (0xff&((306*(0xff&(int)R_VAL(__p__)) + 601*(0xff&(int)G_VAL(__p__)) + 117*(0xff&(int)B_VAL(__p__)))/1024))
 
+#define UNUSED __attribute__ ((unused))
+
 void
-exit_all(void *param)
+exit_all(void *param UNUSED)
 {
     ecore_main_loop_quit();
 }
@@ -162,7 +164,7 @@ get_frame()
 }
 
 static void
-main_win_resize_handler(Ecore_Evas *ee, int w, int h, void *param)
+main_win_resize_handler(Ecore_Evas *ee, int w, int h, void *param UNUSED)
 {
     Evas *canvas = ecore_evas_get(ee);
     Evas_Object *mw = evas_object_name_find(canvas, "main-window");
@@ -175,7 +177,7 @@ main_win_resize_handler(Ecore_Evas *ee, int w, int h, void *param)
 }
 
 static void
-main_win_delete_handler(Ecore_Evas *main_win)
+main_win_delete_handler(Ecore_Evas *main_win UNUSED)
 {
     ecore_main_loop_quit();
 }
@@ -233,7 +235,6 @@ reload()
 void
 render_cur_image()
 {
-    fprintf(stderr, "RENDER_CUR_IMAGE\n");
     double zoom = 1.0;
     int width, height;
 
@@ -668,6 +669,12 @@ main(int argc, char *argv[])
     setlocale(LC_ALL, "");
     textdomain("madeye");
 
+    init_filelist(argv[1]);
+    if(!cur_file) {
+        fprintf(stderr, "cannot open file %s\n", argv[1]);
+        exit(1);
+    }
+
     ecore_x_io_error_handler_set(exit_all, NULL);
 
     ee = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
@@ -730,7 +737,6 @@ main(int argc, char *argv[])
     evas_object_show(image);
 
     read_keymap(operations);
-    init_filelist(argv[1]);
     update_buttons();
     update_footer();
     render_cur_image();
