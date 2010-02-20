@@ -1,3 +1,9 @@
+madeye (0.1.19) zelazny; urgency=low
+
+  * Fix icon positions in horizontal theme
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 20 Feb 2010 13:53:00 +0100
+
 madeye (0.1.18) zelazny; urgency=low
 
   * Use new libeoi api
