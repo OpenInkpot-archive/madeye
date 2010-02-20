@@ -41,6 +41,7 @@
 #include <libchoicebox.h>
 #include <libeoi.h>
 #include <libeoi_help.h>
+#include <libeoi_themes.h>
 
 #include "keyboard.h"
 
@@ -50,6 +51,8 @@ Evas_Object *image;
 
 Eina_List *filelist;
 Eina_List *cur_file;
+
+#define THEME_EDJE "madeye"
 
 char *supported_types[] = {
     "image/jpeg",
@@ -228,6 +231,7 @@ reload()
 void
 render_cur_image()
 {
+    fprintf(stderr, "RENDER_CUR_IMAGE\n");
     double zoom = 1.0;
     int width, height;
 
@@ -686,6 +690,8 @@ main(int argc, char *argv[])
     evas_object_show(bg);
 
     Evas_Object *mw = eoi_main_window_create(evas);
+    eoi_fullwindow_object_register(ee, mw);
+
 
     edje_object_part_text_set(mw, "title", "Madeye");
     edje_object_part_text_set(mw, "footer", "0/0");
@@ -703,14 +709,12 @@ main(int argc, char *argv[])
     evas_object_color_set(r, 0, 0, 255, 255);
     evas_object_show(r);
 
-    Evas_Object *e = edje_object_add(evas);
+    Evas_Object *e = eoi_create_themed_edje(evas, THEME_EDJE, "main_edje");
     evas_object_name_set(e, "main-edje");
-    edje_object_file_set(e, THEME_DIR "/madeye.edj", "main_edje");
     edje_object_part_swallow(mw, "contents", e);
 
-    Evas_Object *fs_i = edje_object_add(evas);
+    Evas_Object *fs_i = eoi_create_themed_edje(evas, THEME_EDJE, "fullscreen_icon");
     evas_object_name_set(fs_i, "fs-icon");
-    edje_object_file_set(fs_i, THEME_DIR "/madeye.edj", "fullscreen_icon");
     edje_object_part_swallow(mw, "state-icons", fs_i);
 
     orig_image = evas_object_image_filled_add(evas);
