@@ -708,6 +708,11 @@ main(int argc, char *argv[])
     edje_object_file_set(e, THEME_DIR "/madeye.edj", "main_edje");
     edje_object_part_swallow(mw, "contents", e);
 
+    Evas_Object *fs_i = edje_object_add(evas);
+    evas_object_name_set(fs_i, "fs-icon");
+    edje_object_file_set(fs_i, THEME_DIR "/madeye.edj", "fullscreen_icon");
+    edje_object_part_swallow(mw, "state-icons", fs_i);
+
     orig_image = evas_object_image_filled_add(evas);
     evas_object_name_set(orig_image, "orig_image");
 

@@ -6,7 +6,7 @@ EDJ = $(EDC:%.edc=%.edj)
 EXTRA_DIST = $(EDC)
 CLEANFILES = $(EDJ)
 
-themedir = $(pkgdatadir)/themes
+themedir = $(datadir)/eoi/themes/default
 theme_DATA = $(EDJ)
 
 all: $(EDJ)

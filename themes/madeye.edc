@@ -23,6 +23,7 @@ images {
     image: "scale_4_180.png" COMP;
     image: "scale_5_180.png" COMP;
     image: "scale_6_180.png" COMP;
+    image: "fullscreen_icon.png" COMP;
 }
 
 #define BUTTON(_name_, _x_, _y_) \
@@ -180,6 +181,24 @@ images {
             }
 
 collections {
+    group {
+        name, "fullscreen_icon";
+        parts {
+            part {
+                name, "fs_icon";
+                type, IMAGE;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    min, 32 32;
+                    max, 32 32;
+                    rel1 { relative, 0.0 1.0; offset, 9 -40; }
+                    rel2 { relative, 0.0 1.0; offset, 39 -10; }
+                    image { normal, "fullscreen_icon.png"; }
+                }
+            }
+        }
+    }
     group {
         name, "main_edje";
         parts {
