@@ -91,6 +91,7 @@ void show_help();
 void quit();
 void adjust_image();
 void reload();
+static void update_buttons();
 
 _op operations[] = {
     {"NEXT_IMAGE", next_image},
@@ -169,6 +170,26 @@ main_win_resize_handler(Ecore_Evas *ee, int w, int h, void *param UNUSED)
     Evas *canvas = ecore_evas_get(ee);
     Evas_Object *mw = evas_object_name_find(canvas, "main-window");
     evas_object_resize(mw, w, h);
+
+    Evas_Object *e = evas_object_name_find(canvas, "main-edje");
+    const char *file;
+    const char *collection;
+    edje_object_file_get(e, &file, &collection);
+    char *replacement = (h > 600) ? "vert_main_edje" : "hor_main_edje";
+    if(strcmp(collection, replacement)) {
+        edje_object_file_set(e, file, replacement);
+        update_buttons();
+    }
+
+    Evas_Object *fs_i = evas_object_name_find(canvas, "fs-icon");
+    if(h > 600) {
+        eoi_main_window_footer_show(mw);
+        edje_object_part_swallow(mw, "state-icons", fs_i);
+    } else {
+        eoi_main_window_footer_hide(mw);
+        edje_object_part_unswallow(mw, fs_i);
+        evas_object_hide(fs_i);
+    }
 
     Evas_Object *bg = evas_object_name_find(canvas, "background");
     evas_object_resize(bg, w, h);
@@ -719,7 +740,7 @@ main(int argc, char *argv[])
     evas_object_color_set(r, 0, 0, 255, 255);
     evas_object_show(r);
 
-    Evas_Object *e = eoi_create_themed_edje(evas, THEME_EDJE, "main_edje");
+    Evas_Object *e = eoi_create_themed_edje(evas, THEME_EDJE, "vert_main_edje");
     evas_object_name_set(e, "main-edje");
     edje_object_part_swallow(mw, "contents", e);
 

@@ -24,13 +24,40 @@ images {
     image: "scale_5_180.png" COMP;
     image: "scale_6_180.png" COMP;
     image: "fullscreen_icon.png" COMP;
+
+// horizontal theme
+    image: "h_background.png" COMP;
+    image: "h_button.png" COMP;
+    image: "h_doublebutton.png" COMP;
+    image: "h_brightness.png" COMP;
+    image: "h_contrast.png" COMP;
+    image: "h_scale_empty.png" COMP;
+    image: "h_scale_1.png" COMP;
+    image: "h_scale_2.png" COMP;
+    image: "h_scale_3.png" COMP;
+    image: "h_scale_4.png" COMP;
+    image: "h_scale_5.png" COMP;
+    image: "h_scale_6.png" COMP;
+    image: "h_scale_empty_180.png" COMP;
+    image: "h_scale_1_180.png" COMP;
+    image: "h_scale_2_180.png" COMP;
+    image: "h_scale_3_180.png" COMP;
+    image: "h_scale_4_180.png" COMP;
+    image: "h_scale_5_180.png" COMP;
+    image: "h_scale_6_180.png" COMP;
 }
 
-#define BUTTON(_name_, _x_, _y_) \
+#define V_BUTTON(_name_, _x_, _y_) \
     _BUTTON(_name_, "button.png", _x_, _y_, 68, 77)
 
-#define DBUTTON(_name_, _x_, _y_)        \
+#define H_BUTTON(_name_, _x_, _y_) \
+    _BUTTON(_name_, "h_button.png", _x_, _y_, 77, 68)
+
+#define V_DBUTTON(_name_, _x_, _y_) \
     _BUTTON(_name_, "doublebutton.png", _x_, _y_, 68, 154)
+
+#define H_DBUTTON(_name_, _x_, _y_) \
+    _BUTTON(_name_, "h_doublebutton.png", _x_, _y_, 154, 68)
 
 #define _BUTTON(_name_, _image_, _x_, _y_, _w_, _h_)        \
     part {		\
@@ -91,25 +118,8 @@ images {
             }
 
 #define STR(x) #x
-#define SCALE_STATE(s) \
-                description {	\
-                    state, STR(s) 0.0;	\
-                    inherit, "default" 0.0;	\
-                    image { normal, "scale_"STR(s)".png"; }	\
-                }
 
-#define SCALE_STATE_180(s) \
-                description {	\
-                    state, STR(s) 0.0;	\
-                    inherit, "default" 0.0;	\
-                    image { normal, "scale_"STR(s)"_180.png"; }	\
-                }
-
-#define SCALE(n) \
-            part {	\
-                name, n"-scale-1";	\
-                type, IMAGE;	\
-                mouse_events, 0;	\
+#define V_SCALE_DEF_STATE(n) \
                 description {	\
                     state, "default" 0.0;	\
                     min, 20 48;	\
@@ -117,18 +127,9 @@ images {
                     rel1 { relative, 0.0 0.0; offset, 0 15; to, n"-button"; }	\
                     rel2 { relative, 1.0 0.5; offset, -1 -15; to, n"-button"; }	\
                     image { normal, "scale_empty.png"; }	\
-                }	\
-                SCALE_STATE(1) \
-                SCALE_STATE(2) \
-                SCALE_STATE(3) \
-                SCALE_STATE(4) \
-                SCALE_STATE(5) \
-                SCALE_STATE(6) \
-            }	\
-            part {	\
-                name, n"-scale-2";	\
-                type, IMAGE;	\
-                mouse_events, 0;	\
+                }
+
+#define V_SCALE_DEF_STATE_180(n) \
                 description {	\
                     state, "default" 0.0;	\
                     min, 20 48;	\
@@ -136,14 +137,76 @@ images {
                     rel1 { relative, 1.0 1.0; offset, -1 -15; to, n"-button"; }	\
                     rel2 { relative, 0.0 0.5; offset, 0 15; to, n"-button"; }	\
                     image { normal, "scale_empty_180.png"; }	\
-                }	\
-                SCALE_STATE_180(1) \
-                SCALE_STATE_180(2) \
-                SCALE_STATE_180(3) \
-                SCALE_STATE_180(4) \
-                SCALE_STATE_180(5) \
-                SCALE_STATE_180(6) \
+                }
+
+#define H_SCALE_DEF_STATE(n) \
+                description {	\
+                    state, "default" 0.0;	\
+                    min, 48 20;	\
+                    max, 48 20;	\
+                    rel1 { relative, 0.0 0.0; offset, 15 0; to, n"-button"; }	\
+                    rel2 { relative, 0.5 1.0; offset, -15 -1; to, n"-button"; }	\
+                    image { normal, "h_scale_empty.png"; }	\
+                }
+
+#define H_SCALE_DEF_STATE_180(n) \
+                description {	\
+                    state, "default" 0.0;	\
+                    min, 48 20;	\
+                    max, 48 20;	\
+                    rel1 { relative, 1.0 1.0; offset, -15 -1; to, n"-button"; }	\
+                    rel2 { relative, 0.5 0.0; offset, 15 0; to, n"-button"; }	\
+                    image { normal, "h_scale_empty_180.png"; }	\
+                }
+
+#define SCALE_STATE(s, prefix) \
+                description {	\
+                    state, STR(s) 0.0;	\
+                    inherit, "default" 0.0;	\
+                    image { normal, prefix"scale_"STR(s)".png"; }	\
+                }
+
+#define SCALE_STATE_180(s, prefix) \
+                description {	\
+                    state, STR(s) 0.0;	\
+                    inherit, "default" 0.0;	\
+                    image { normal, prefix"scale_"STR(s)"_180.png"; }	\
+                }
+
+#define V_SCALE(n) \
+    SCALE(n, "", V_SCALE_DEF_STATE(n), V_SCALE_DEF_STATE_180(n))
+
+#define H_SCALE(n) \
+    SCALE(n, "h_", H_SCALE_DEF_STATE(n), H_SCALE_DEF_STATE_180(n))
+
+#define SCALE(n, prefix, def_state, def_state_180) \
+            part {	\
+                name, n"-scale-1";	\
+                type, IMAGE;	\
+                mouse_events, 0;	\
+                def_state \
+                SCALE_STATE(1, prefix) \
+                SCALE_STATE(2, prefix) \
+                SCALE_STATE(3, prefix) \
+                SCALE_STATE(4, prefix) \
+                SCALE_STATE(5, prefix) \
+                SCALE_STATE(6, prefix) \
             }	\
+            part {	\
+                name, n"-scale-2";	\
+                type, IMAGE;	\
+                mouse_events, 0;	\
+                def_state_180   \
+                SCALE_STATE_180(1, prefix) \
+                SCALE_STATE_180(2, prefix) \
+                SCALE_STATE_180(3, prefix) \
+                SCALE_STATE_180(4, prefix) \
+                SCALE_STATE_180(5, prefix) \
+                SCALE_STATE_180(6, prefix) \
+            }	\
+            SCALE_PROG(n)
+
+#define SCALE_PROG(n) \
             program {	\
                 name, n"-level";	\
                 signal, n"-level,*";	\
@@ -200,7 +263,7 @@ collections {
         }
     }
     group {
-        name, "main_edje";
+        name, "vert_main_edje";
         parts {
             part {
                 name, "background_1";
@@ -221,7 +284,7 @@ collections {
                     state, "default" 0.0;
                     rel1 { relative, 0.0 0.0; offset, 1 1; }
                     rel2 { relative, 1.0 1.0; offset, -2 -2; }
-                    fill { 
+                    fill {
                         origin { relative, 0.0 0.0; }
                         size { relative, 0.0 0.0; offset, 600 14; } }
                     image { normal, "background.png"; }
@@ -272,21 +335,128 @@ collections {
                 }
             }
 
-            DBUTTON("brightness-button", 1, 1)
+            V_DBUTTON("brightness-button", 1, 1)
             BUTTON_IMAGE("brightness-image", "brightness-button", "brightness.png")
-            SCALE("brightness")
+            V_SCALE("brightness")
 
-            DBUTTON("contrast-button", 1, 155)
+            V_DBUTTON("contrast-button", 1, 155)
             BUTTON_IMAGE("contrast-image", "contrast-button", "contrast.png")
-            SCALE("contrast")
+            V_SCALE("contrast")
 
-            BUTTON("dither-button", 1, 310)
+            V_BUTTON("dither-button", 1, 310)
             BUTTON_TOGGLE_IMAGE("dither", "dither-button", "dithering_off.png", "dithering_on.png")
             BUTTON_PROG("dither", "dither,*")
 
-            BUTTON("presset-button", 1, 388)
+            V_BUTTON("presset-button", 1, 388)
             BUTTON_TOGGLE_IMAGE("presset", "presset-button", "apply-to-this-image.png", "apply-to-all-images.png")
             BUTTON_PROG("presset", "presset,*")
+        }
+    }
+    group {
+        name, "hor_main_edje";
+        parts {
+            part {
+                name, "background_1";
+                type, RECT;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    rel1 { relative, 0.0 0.0; offset, 0 0; }
+                    rel2 { relative, 1.0 1.0; offset, -1 -1; }
+                }
+            }
+            part {
+                name, "background_2";
+                type, IMAGE;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    rel1 { relative, 0.0 0.0; offset, 1 1; }
+                    rel2 { relative, 1.0 1.0; offset, -2 -2; }
+                    fill {
+                        origin { relative, 0.0 0.0; }
+                        size { relative, 0.0 0.0; offset, 14 550; } }
+                    image { normal, "h_background.png"; }
+                }
+            }
+            part {
+                name, "frame1";
+                type, RECT;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 0 0 0 255;
+                    rel1 { to, "background_2"; relative, 0.0 0.0; offset, 15 15; }
+                    rel2 { to, "background_2"; relative, 1.0 0.0; offset, -240 445; }
+                }
+            }
+            part {
+                name, "frame";
+                type, RECT;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 204 204 204 255;
+                    rel1 { relative, 0.0 0.0; offset, 1 1; to, "frame1"; }
+                    rel2 { relative, 1.0 1.0; offset, -2 -2; to, "frame1"; }
+                }
+            }
+            part {
+                name, "image-frame";
+                type, RECT;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 204 204 204 255;
+                    rel1 { relative, 0.0 0.0; offset, 10 10; to, "frame"; }
+                    rel2 { relative, 1.0 1.0; offset, -11 -11; to, "frame"; }
+                }
+            }
+            part {
+                name, "camera";
+                type, IMAGE;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    rel1 { to, "background_2"; relative, 1.0 1.0; offset, -219 -195; }
+                    rel2 { to, "background_2"; relative, 1.0 1.0; offset, -2 -95; }
+                    image { normal, "camera_pic.png"; }
+                }
+            }
+
+            #define YPOS 550-68
+
+            H_DBUTTON("brightness-button", 1, YPOS)
+            BUTTON_IMAGE("brightness-image", "brightness-button", "h_brightness.png")
+            H_SCALE("brightness")
+
+            H_DBUTTON("contrast-button", 155, YPOS)
+            BUTTON_IMAGE("contrast-image", "contrast-button", "h_contrast.png")
+            H_SCALE("contrast")
+
+            H_BUTTON("dither-button", 310, YPOS)
+            BUTTON_TOGGLE_IMAGE("dither", "dither-button", "dithering_off.png", "dithering_on.png")
+            BUTTON_PROG("dither", "dither,*")
+
+            H_BUTTON("presset-button", 388, YPOS)
+            BUTTON_TOGGLE_IMAGE("presset", "presset-button", "apply-to-this-image.png", "apply-to-all-images.png")
+            BUTTON_PROG("presset", "presset,*")
+
+            H_BUTTON("fs-button", 722, YPOS)
+            part {
+                name, "fs-image";
+                type, IMAGE;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    min, 32 32;
+                    max, 32 32;
+                    rel1 { relative, 0.0 0.0; offset, 0 0; to, "fs-button"; }
+                    rel2 { relative, 1.0 1.0; offset, -1 -1; to, "fs-button"; }
+                    image { normal, "fullscreen_icon.png"; }
+                }
+            }
         }
     }
 }
