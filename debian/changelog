@@ -1,3 +1,16 @@
+madeye (0.1.18) zelazny; urgency=low
+
+  * Use new libeoi api
+  * New brightness icon
+  * Add 10 pixel border around the image
+  * Add fullscreen icon
+  * Switch to libeoi_themes API
+  * Add clock and battery
+  * Code improvements
+  * Add horizontal theme
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 20 Feb 2010 13:28:50 +0100
+
 madeye (0.1.17) zelazny; urgency=low
 
   * New gui. Part 1.
