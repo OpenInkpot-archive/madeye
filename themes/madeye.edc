@@ -427,19 +427,19 @@ collections {
 
             #define YPOS 550-68
 
-            H_DBUTTON("brightness-button", 1, YPOS)
+            H_DBUTTON("brightness-button", 50, YPOS)
             BUTTON_IMAGE("brightness-image", "brightness-button", "h_brightness.png")
             H_SCALE("brightness")
 
-            H_DBUTTON("contrast-button", 155, YPOS)
+            H_DBUTTON("contrast-button", 205, YPOS)
             BUTTON_IMAGE("contrast-image", "contrast-button", "h_contrast.png")
             H_SCALE("contrast")
 
-            H_BUTTON("dither-button", 310, YPOS)
+            H_BUTTON("dither-button", 362, YPOS)
             BUTTON_TOGGLE_IMAGE("dither", "dither-button", "dithering_off.png", "dithering_on.png")
             BUTTON_PROG("dither", "dither,*")
 
-            H_BUTTON("presset-button", 388, YPOS)
+            H_BUTTON("presset-button", 440, YPOS)
             BUTTON_TOGGLE_IMAGE("presset", "presset-button", "apply-to-this-image.png", "apply-to-all-images.png")
             BUTTON_PROG("presset", "presset,*")
 
