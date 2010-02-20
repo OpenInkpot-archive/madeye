@@ -42,6 +42,8 @@
 #include <libeoi.h>
 #include <libeoi_help.h>
 #include <libeoi_themes.h>
+#include <libeoi_clock.h>
+#include <libeoi_battery.h>
 
 #include "keyboard.h"
 
@@ -691,7 +693,8 @@ main(int argc, char *argv[])
 
     Evas_Object *mw = eoi_main_window_create(evas);
     eoi_fullwindow_object_register(ee, mw);
-
+    eoi_run_clock(mw);
+    eoi_run_battery(mw);
 
     edje_object_part_text_set(mw, "title", "Madeye");
     edje_object_part_text_set(mw, "footer", "0/0");
