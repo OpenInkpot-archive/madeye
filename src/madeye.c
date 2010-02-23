@@ -812,10 +812,10 @@ main(int argc, char *argv[])
     evas_object_del(image);
     evas_object_del(bg);
 
-    edje_shutdown();
     ecore_evas_shutdown();
     ecore_shutdown();
     evas_shutdown();
+    edje_shutdown();
 
     return 0;
 }
