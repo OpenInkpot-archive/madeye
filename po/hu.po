@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: madeye 0.1\n"
 "Report-Msgid-Bugs-To: lunohod@openinkpot.org\n"
-"POT-Creation-Date: 2010-02-23 09:47+0100\n"
+"POT-Creation-Date: 2010-02-23 13:24+0100\n"
 "PO-Revision-Date: 2009-10-18 15:37+0700\n"
 "Last-Translator: Anrdás Csehi <acsehi@gmail.com>\n"
 "Language-Team: Hungarian\n"
@@ -27,6 +27,11 @@ msgstr ""
 msgid "kB"
 msgstr ""
 
-#: src/madeye.c:710
+#: src/madeye.c:293
+#, c-format
+msgid "%c"
+msgstr ""
+
+#: src/madeye.c:711
 msgid "Madeye: Help"
 msgstr "Madeye: Segítség"

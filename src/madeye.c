@@ -289,9 +289,10 @@ update_info()
     free(t);
 
     time_t time = ecore_file_mod_time(file->filename);
-    t = ctime(&time);
-    t[strlen(t) - 1] = 0;
+    t = (char*)malloc(200);
+    strftime(t, 200, gettext("%c"), localtime(&time));
     edje_object_part_text_set(e, "date", t);
+    free(t);
 }
 
 void
