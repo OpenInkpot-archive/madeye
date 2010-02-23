@@ -1,3 +1,11 @@
+madeye (0.1.20) zelazny; urgency=low
+
+  * l10n: french translation
+  * Add file information
+  * Update .po files
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 23 Feb 2010 09:48:51 +0100
+
 madeye (0.1.19) zelazny; urgency=low
 
   * Fix icon positions in horizontal theme
