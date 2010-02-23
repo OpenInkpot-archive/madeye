@@ -1,3 +1,11 @@
+madeye (0.1.21) zelazny; urgency=low
+
+  * Adjust frame size
+  * Prevent segfault on exit
+  * Localizing time string
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Tue, 23 Feb 2010 13:26:37 +0100
+
 madeye (0.1.20) zelazny; urgency=low
 
   * l10n: french translation
