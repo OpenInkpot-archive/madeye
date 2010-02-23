@@ -56,11 +56,14 @@ Eina_List *cur_file;
 
 #define THEME_EDJE "madeye"
 
-char *supported_types[] = {
-    "image/jpeg",
-    "image/png",
-    "image/gif",
-    NULL
+struct mime_type_t {
+    const char *type;
+    const char *name;
+} supported_types[] = {
+    { "image/jpeg", "JPEG" },
+    { "image/png", "PNG" },
+    { "image/gif", "GIF" },
+    { NULL, NULL },
 };
 
 typedef struct frame {
@@ -70,6 +73,7 @@ typedef struct frame {
 typedef struct file {
     const char *filename;
     unsigned int idx;
+    struct mime_type_t *mtype;
 } file_t;
 
 int brightness_level = 0, contrast_level = 0;
@@ -254,6 +258,43 @@ reload()
 }
 
 void
+update_info()
+{
+    Evas_Object *e = evas_object_name_find(evas, "main-edje");
+
+    file_t *file = eina_list_data_get(cur_file);
+
+    edje_object_part_text_set(e, "filename", ecore_file_strip_ext(ecore_file_file_get(file->filename)));
+
+    if(file->mtype)
+        edje_object_part_text_set(e, "extention", file->mtype->name);
+    else
+        edje_object_part_text_set(e, "extention", "");
+
+    char *t;
+    int width, height;
+    evas_object_image_size_get(orig_image, &width, &height);
+    asprintf(&t, gettext("%dpx x %dpx"), width, height);
+    edje_object_part_text_set(e, "dimensions", t);
+    free(t);
+
+    float fsize = ecore_file_size(file->filename);
+    fsize /= 1024;
+    if(fsize > 1024) {
+        fsize /= 1024;
+        asprintf(&t, "%.2f %s", fsize, gettext("MB"));
+    } else
+        asprintf(&t, "%.2f %s", fsize, gettext("kB"));
+    edje_object_part_text_set(e, "size", t);
+    free(t);
+
+    time_t time = ecore_file_mod_time(file->filename);
+    t = ctime(&time);
+    t[strlen(t) - 1] = 0;
+    edje_object_part_text_set(e, "date", t);
+}
+
+void
 render_cur_image()
 {
     double zoom = 1.0;
@@ -266,6 +307,8 @@ render_cur_image()
     file_t *file = eina_list_data_get(cur_file);
     evas_object_image_file_set(orig_image, file->filename, NULL);
     evas_object_image_size_get(orig_image, &width, &height);
+    update_info();
+
     int stride = evas_object_image_stride_get(orig_image);
 
     if (dither)
@@ -630,11 +673,12 @@ init_filelist(const char *file)
         if (!mime_type)
             continue;
 
-        for (char **t = supported_types; t && *t; t++)
-            if (!strncmp(mime_type, *t, strlen(*t))) {
+        for (struct mime_type_t *t = supported_types; t->type; t++)
+            if (!strncmp(mime_type, t->type, strlen(t->type))) {
                 file_t *fdata = (file_t *) malloc(sizeof(file_t));
                 fdata->filename = strdup(filename);
                 fdata->idx = idx++;
+                fdata->mtype = t;
 
                 filelist = eina_list_append(filelist, fdata);
 
