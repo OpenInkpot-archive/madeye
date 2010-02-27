@@ -1,3 +1,10 @@
+madeye (0.1.23) zelazny; urgency=low
+
+  * Prepare help files for transifex
+  * Add oi-help-compiler to host b-d
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 27 Feb 2010 16:20:14 +0100
+
 madeye (0.1.22) zelazny; urgency=low
 
   * Fix fullscreen button size
