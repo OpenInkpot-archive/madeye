@@ -1,3 +1,10 @@
+madeye (0.1.22) zelazny; urgency=low
+
+  * Fix fullscreen button size
+  * Add wheel keys to the keymap
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 27 Feb 2010 15:04:00 +0100
+
 madeye (0.1.21) zelazny; urgency=low
 
   * Adjust frame size
