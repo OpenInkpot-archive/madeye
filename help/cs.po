@@ -1,0 +1,50 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-02-27 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.1\n"
+
+msgid "index"
+msgstr ""
+"<h1>Aplikace pro prohlížení obrázků - MadEye</h1>\n"
+"\n"
+"<br>\n"
+"1) Ovládání\n"
+"<br>\n"
+"2) O programu\n"
+
+msgid "madeye1"
+msgstr ""
+"<h2>Prohlížení obrázků:</h2>\n"
+"\n"
+"<p>Pro pohyb mezi soubory obrázků v právě otevřeném adresáři použij "
+"joysticková tlačítka vlevo/vpravo nebo programovatelné tlačítko “9”. </p>"
+"\n"
+"<p>Pro změnu orientace obrazovky (Portrét/Krajina), stiskni tlačítko "
+"“Otočit”.</p>\n"
+"<p>Pro změnu jasu obrázku použij tlačítka “1”/”2” (ke snížení/zvýšení "
+"jasu).</p>\n"
+"<p>Pro změnu kontrastu obrázku použij tlačítka “3”/”4” (ke "
+"snížení/zvýšení kontrastu).</p>\n"
+"<p>Po stisku tlačítka “5” se změní mód zobrazení obrázku.</p>\n"
+
+msgid "madeye2"
+msgstr ""
+"<h2>O programu:</h2>\n"
+"\n"
+"<p>Madeye – aplikace pro prohlížení obrázků. Podporované formáty: jpeg, "
+"gif, png.</p>\n"
+

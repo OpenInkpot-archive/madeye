@@ -1,0 +1,50 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-02-27 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.1\n"
+
+msgid "index"
+msgstr ""
+"<h1>Програма для перегляду зображень – MadEye</h1>\n"
+"\n"
+"<br>\n"
+"1) Перегляд зображень\n"
+"<br>\n"
+"2) Про програму\n"
+
+msgid "madeye1"
+msgstr ""
+"<h2>Перегляд зображень:</h2>\n"
+"\n"
+"<p>Перехід між файлами зображень цього каталогу здійснюється за допомогою"
+" кнопок джойстика «Вліво/Вправо» або цифровою кнопкою «9».</p>\n"
+"<p>Для зміни орієнтації відображення сторінки (портретна/ландшафтна) "
+"натисніть кнопку «Поворот сторінки».</p>\n"
+"<p>Для зміни яскравості зображення використовуйте кнопки «1»/«2» "
+"відповідно щоб зменшити/збільшити. </p>\n"
+"<p>Для зміни контрасту зображення використовуйте кнопки «3»/«4» "
+"відповідно щоб зменшити/збільшити. </p>\n"
+"<p>При натисканні кнопки «5» змінюється режим відображення зображень.</p>"
+"\n"
+
+msgid "madeye2"
+msgstr ""
+"<h2>Про програму:</h2>\n"
+"\n"
+"<p>Madeye – програма для перегляду зображень. Підтримує формати: jpeg, "
+"gif, png.</p>\n"
+

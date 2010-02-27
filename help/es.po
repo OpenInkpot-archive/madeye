@@ -1,0 +1,50 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-02-27 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.1\n"
+
+msgid "index"
+msgstr ""
+"<h1>Application for viewing images - MadEye</h1>\n"
+"\n"
+"<br>\n"
+"1) Controls\n"
+"<br>\n"
+"2) About\n"
+
+msgid "madeye1"
+msgstr ""
+"<h2>Visualización de imágenes:</h2>\n"
+"\n"
+"<p>Para navegar entre los ficheros de imagen del directorio actual use "
+"los cursores izquierda/derecha o el botón programable “9”. </p>\n"
+"<p>Para cambiar la orientación de la pantalla (vertical/apaisado), pulse "
+"el botón “Rotación”.</p>\n"
+"<p>Para cambiar el brillo de la imagen use los botones “1”/”2” (para "
+"disminuir/incrementar el brillo).</p>\n"
+"<p>Para cambiar el contraste de la imagen use los botones “3”/”4” (para "
+"disminuir/incrementar el contraste).</p>\n"
+"<p>Si presiona el botón “5”, el modo de visualización de la imagen "
+"cambia.</p>\n"
+
+msgid "madeye2"
+msgstr ""
+"<h2>Acerca de:</h2>\n"
+"\n"
+"<p>Madeye – Aplicación para visualizar imágenes. Formatos soportados: "
+"jpeg, gif, png.</p>\n"
+

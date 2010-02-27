@@ -1,0 +1,52 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-02-27 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.1\n"
+
+msgid "index"
+msgstr ""
+"<h1>Bildbetrachter-Applikation – MadEye</h1>\n"
+"\n"
+"<br>\n"
+"1) Bilder anzeigen\n"
+"<br>\n"
+"2) Über MadEye\n"
+
+msgid "madeye1"
+msgstr ""
+"<h2>Bilder anzeigen:</h2>\n"
+"\n"
+"<p>Wechsel zwischen Bildern im aktuellen Verzeichnis mit den Tasten \"←\""
+" bzw. links / \"→\" bzw. rechts auf dem Steuerkreuz oder mit der "
+"Schnelltaste \"9\".</p>\n"
+"<p>Seite drehen (Hochformat/Querformat): Taste \"Rotate\". Das "
+"Steuerkreuz passt sich an die Ausrichtung der Seite an.</p>\n"
+"<p>Helligkeit: Schnelltasten \"1\"/\"2\" um die Bildhelligkeit zu "
+"verringern/erhöhen.</p>\n"
+"<p>Kontrast: Schnelltasten \"3\"/\"4\" um den Bildkontrast zu "
+"verringern/erhöhen.</p>\n"
+"<p>Dithering: Schnelltaste \"5\" wechselt zwischen Bilddarstellung "
+"mit/ohne Graustufen-Fehlerdiffusion.</p>\n"
+"\n"
+
+msgid "madeye2"
+msgstr ""
+"<h2>Über MadEye:</h2>\n"
+"\n"
+"<p>MadEye – eine Bildbetrachter-Applikation für Grafikdateien. "
+"Unterstützte Dateiformate: jpeg, gif, png.</p>\n"
+

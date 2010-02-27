@@ -1,0 +1,49 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-02-27 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.1\n"
+
+msgid "index"
+msgstr ""
+"<h1>Application for viewing images - MadEye</h1>\n"
+"\n"
+"<br>\n"
+"1) Controls\n"
+"<br>\n"
+"2) About\n"
+
+msgid "madeye1"
+msgstr ""
+"<h2>Viewing images:</h2>\n"
+"\n"
+"<p>For navigation between image files in the current folder use joystick "
+"buttons left/right or programmable button “9”. </p>\n"
+"<p>To change orientation of the screen (Portrait/Landscape), press "
+"“Rotate” button.</p>\n"
+"<p>To change brightness of the image use “1”/”2” buttons (to "
+"decrease/increase brightness).</p>\n"
+"<p>To change contrast of the image use “3”/”4” buttons (to "
+"decrease/increase contrast).</p>\n"
+"<p>If you press “5” button, the image displaying mode changes.</p>\n"
+
+msgid "madeye2"
+msgstr ""
+"<h2>About:</h2>\n"
+"\n"
+"<p>Madeye – application for viewing images. Supported formats: jpeg, gif,"
+" png.</p>\n"
+

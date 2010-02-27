@@ -1,0 +1,49 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-02-27 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.1\n"
+
+msgid "index"
+msgstr ""
+"<h1>Przeglądarka obrazów MadEye</h1>\n"
+"\n"
+"<br>\n"
+"1) Sterowanie\n"
+"<br>\n"
+"2) O programie\n"
+
+msgid "madeye1"
+msgstr ""
+"<h2>Przeglądanie obrazów:</h2>\n"
+"\n"
+"<p>Aby przechodzić między obrazami z bieżącego katalogu, użyj przycisków "
+"lewo/prawo z dżojstika lub programowalnego przycisku “9”.</p>\n"
+"<p>Aby ustawić orientację obrazu (pionowa/pozioma), wciśnij przycisk "
+"\"Obróć\".</p>\n"
+"<p>Aby ustawić jasność obrazu użyj przycisków “1”/”2” "
+"(zmniejszenie/zwiększenie jasności).</p>\n"
+"<p>Aby ustawić kontrast obrazu użyj przycisków “3”/”4” "
+"(zmniejszenie/zwiększenie kontrastu).</p>\n"
+"<p>Wciśnięcie przycisku “5” powoduje zmianę trybu wyświetlania</p>\n"
+
+msgid "madeye2"
+msgstr ""
+"<h2>O programie:</h2>\n"
+"\n"
+"<p>Madeye – program do przeglądania plików graficznych. Obsługiwane "
+"formaty: jpeg, gif, png.</p>\n"
+

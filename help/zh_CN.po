@@ -1,0 +1,44 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-02-27 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.1\n"
+
+msgid "index"
+msgstr ""
+"<h1>图片查看程序 - MadEye</h1>\n"
+"\n"
+"<br>\n"
+"1) 控制\n"
+"<br>\n"
+"2) 关于MadEye\n"
+
+msgid "madeye1"
+msgstr ""
+"<h2>查看图片</h2>\n"
+"\n"
+"<p>使用左/右或9/0查看当前目录下的图片文件。</p>\n"
+"<p>按“Rotate”键更改屏幕的朝向（纵向/横向）。</p>\n"
+"<p>使用1/2提高和降低图片亮度。</p>\n"
+"<p>使用3/4提高和降低图片对比度。</p>\n"
+"<p>使用5重置图片显示的亮度和对比度。</p>\n"
+
+msgid "madeye2"
+msgstr ""
+"<h2>关于MadEye</h2>\n"
+"\n"
+"<p>Madeye – 图片查看程序，支持的格式：jpeg, gif, png。</p>\n"
+
