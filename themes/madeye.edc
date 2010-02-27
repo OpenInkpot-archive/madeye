@@ -507,7 +507,8 @@ collections {
             BUTTON_TOGGLE_IMAGE("presset", "presset-button", "apply-to-this-image.png", "apply-to-all-images.png")
             BUTTON_PROG("presset", "presset,*")
 
-            H_BUTTON("fs-button", 722, YPOS)
+            //H_BUTTON("fs-button", 722, YPOS)
+            _BUTTON("fs-button", "h_button.png", 755, YPOS, 44, 68)
             part {
                 name, "fs-image";
                 type, IMAGE;
