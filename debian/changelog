@@ -1,3 +1,14 @@
+madeye (0.1.24) zelazny; urgency=low
+
+  [ Mirek ]
+  * l10n: Initial Czech translation
+
+  [ Alexander Kerner ]
+  * Fixed .po files
+  * Fix fs button in horizontal theme
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Wed, 10 Mar 2010 11:04:51 +0100
+
 madeye (0.1.23) zelazny; urgency=low
 
   * Prepare help files for transifex
