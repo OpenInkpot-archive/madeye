@@ -508,7 +508,7 @@ collections {
             BUTTON_PROG("presset", "presset,*")
 
             //H_BUTTON("fs-button", 722, YPOS)
-            _BUTTON("fs-button", "h_button.png", 755, YPOS, 44, 68)
+            //_BUTTON("fs-button", "h_button.png", 755, YPOS, 44, 68)
             part {
                 name, "fs-image";
                 type, IMAGE;
@@ -517,8 +517,8 @@ collections {
                     state, "default" 0.0;
                     min, 32 32;
                     max, 32 32;
-                    rel1 { relative, 0.0 0.0; offset, 0 0; to, "fs-button"; }
-                    rel2 { relative, 1.0 1.0; offset, -1 -1; to, "fs-button"; }
+                    rel1 { relative, 0.0 0.0; offset, 750 YPOS; }// to, "fs-button"; }
+                    rel2 { relative, 1.0 1.0; offset, -1 -1;}// to, "fs-button"; }
                     image { normal, "fullscreen_icon.png"; }
                 }
             }
