@@ -1,7 +1,7 @@
 # madeye
 # This file is put in the public domain.
 # Alexander Kerner <lunohod@openinkpot.org>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: madeye 0.1\n"
@@ -19,14 +19,6 @@ msgstr ""
 msgid "%dpx x %dpx"
 msgstr ""
 
-#: src/madeye.c:285
-msgid "MB"
-msgstr ""
-
-#: src/madeye.c:287
-msgid "kB"
-msgstr ""
-
 #: src/madeye.c:293
 #, c-format
 msgid "%c"
@@ -35,3 +27,11 @@ msgstr ""
 #: src/madeye.c:711
 msgid "Madeye: Help"
 msgstr "Madeye: Справка"
+
+#: src/madeye.c:287
+msgid "kB"
+msgstr "кБ"
+
+#: src/madeye.c:285
+msgid "MB"
+msgstr "МБ"
