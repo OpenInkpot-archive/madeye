@@ -20,11 +20,6 @@ msgstr ""
 msgid "%dpx x %dpx"
 msgstr ""
 
-#: src/madeye.c:293
-#, c-format
-msgid "%c"
-msgstr ""
-
 #: src/madeye.c:711
 msgid "Madeye: Help"
 msgstr "Madeye: Pomoc"
@@ -36,3 +31,8 @@ msgstr "kb"
 #: src/madeye.c:285
 msgid "MB"
 msgstr "MB"
+
+#: src/madeye.c:293
+#, c-format
+msgid "%c"
+msgstr "%c"
