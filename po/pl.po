@@ -15,11 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/madeye.c:277
-#, c-format
-msgid "%dpx x %dpx"
-msgstr ""
-
 #: src/madeye.c:711
 msgid "Madeye: Help"
 msgstr "Madeye: Pomoc"
@@ -36,3 +31,8 @@ msgstr "MB"
 #, c-format
 msgid "%c"
 msgstr "%c"
+
+#: src/madeye.c:277
+#, c-format
+msgid "%dpx x %dpx"
+msgstr "%dpx x %dpx"
