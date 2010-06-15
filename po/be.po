@@ -14,11 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/madeye.c:277
-#, c-format
-msgid "%dpx x %dpx"
-msgstr ""
-
 #: src/madeye.c:711
 msgid "Madeye: Help"
 msgstr "Madeye: Даведка"
@@ -35,3 +30,8 @@ msgstr "МБ"
 #, c-format
 msgid "%c"
 msgstr "%c"
+
+#: src/madeye.c:277
+#, c-format
+msgid "%dpx x %dpx"
+msgstr "%dpx x %dpx"
