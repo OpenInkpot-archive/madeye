@@ -1,3 +1,19 @@
+madeye (0.1.27) zelazny; urgency=low
+
+  [ Tomasz Długosz ]
+  * l10n: initial swedish translation
+
+  [ Shuntya ]
+  * l10n: Updates to Spanish (Castilian) (es) translation
+
+  [ mascal ]
+  * l10n: Updates to Italian (it) translation
+
+  [ jekhor ]
+  * l10n: Updates to Belarusian (be) translation
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 19 Jun 2010 00:58:31 +0200
+
 madeye (0.1.26) zelazny; urgency=low
 
   [ lozhkinet ]
