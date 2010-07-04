@@ -29,10 +29,12 @@
 
 #define KEYMAP_FILE "/usr/share/madeye/keymap.ini"
 
+#define __UNUSED__ __attribute__((__unused__))
+
 static keys_t* keys;
 static _op* operations;
 
-void key_handler(void *data, Evas *evas, Evas_Object *obj, void *event_info)
+void key_handler(void *data __UNUSED__, Evas *evas __UNUSED__, Evas_Object *obj __UNUSED__, void *event_info)
 {
 	Evas_Event_Key_Up *e = (Evas_Event_Key_Up*)event_info;
 
@@ -46,7 +48,7 @@ void key_handler(void *data, Evas *evas, Evas_Object *obj, void *event_info)
     }
 }
 
-int read_keymap(_op* operations_)
+void read_keymap(_op* operations_)
 {
     keys = keys_alloc("madeye");
     operations = operations_;

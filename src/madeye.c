@@ -30,6 +30,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <libintl.h>
+#include <locale.h>
 #include <Evas.h>
 #include <Ecore.h>
 #include <Ecore_X.h>

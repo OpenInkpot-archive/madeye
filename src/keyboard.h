@@ -7,6 +7,6 @@ typedef struct {
 } _op;
 
 void key_handler(void *data, Evas *evas, Evas_Object *obj, void *event_info);
-int read_keymap(_op* operations);
+void read_keymap(_op* operations);
 
 #endif
