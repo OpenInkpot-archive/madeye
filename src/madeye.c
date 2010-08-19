@@ -744,7 +744,7 @@ main(int argc, char *argv[])
 
     ecore_x_io_error_handler_set(exit_all, NULL);
 
-    ee = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+    ee = ecore_evas_software_x11_8_new(0, 0, 0, 0, 600, 800);
 
     ecore_evas_borderless_set(ee, 0);
     ecore_evas_shaped_set(ee, 0);
