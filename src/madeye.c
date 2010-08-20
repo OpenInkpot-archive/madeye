@@ -116,11 +116,6 @@ _op operations[] = {
 
 unsigned char lut[256];
 
-#define R_VAL(__p__) *(__p__+2)
-#define G_VAL(__p__) *(__p__+1)
-#define B_VAL(__p__) *(__p__)
-#define Y_VAL(__p__) (0xff&((306*(0xff&(int)R_VAL(__p__)) + 601*(0xff&(int)G_VAL(__p__)) + 117*(0xff&(int)B_VAL(__p__)))/1024))
-
 #define UNUSED __attribute__ ((unused))
 
 void
@@ -325,7 +320,7 @@ render_cur_image()
     else {
         char *s = evas_object_image_data_get(orig_image, EINA_FALSE);
         char *t = evas_object_image_data_get(image, EINA_TRUE);
-        memcpy(t, s, stride * height * 4);
+        memcpy(t, s, stride * height * (evas_object_image_alpha_get(orig_image)?2:1));
 
         evas_object_image_data_update_add(image, 0, 0, width, height);
     }
@@ -386,33 +381,19 @@ adjust_image()
     stride = evas_object_image_stride_get(image);
 
     int c;
-    char *p = evas_object_image_data_get(orig_image, EINA_FALSE);
-    char *_p = evas_object_image_data_get(image, EINA_TRUE);
+    unsigned char *p = evas_object_image_data_get(orig_image, EINA_FALSE);
+    unsigned char *_p = evas_object_image_data_get(image, EINA_TRUE);
 
     Eina_Bool alpha = evas_object_image_alpha_get(orig_image);
 
     for (int j = 0; j < h; j++) {
         for (int i = 0; i < w; i++) {
-            if (!alpha || (int) *p) {
-                if (!(R_VAL(p) == G_VAL(p) && G_VAL(p) == B_VAL(p))) {
-                    c = Y_VAL(p);
-
-                    if (c < 0)
-                        c = 0;
-                    else if (c > 255)
-                        c = 255;
-                } else {
-                    c = R_VAL(p) & 0xff;
-                }
-
-                G_VAL(_p) = B_VAL(_p) = R_VAL(_p) = lut[c];
-            }
-
-            p += 4;
-            _p += 4;
+            if (!alpha || *p)
+                *_p++ = lut[*p++];
         }
-        p += (stride - w) * 4;
-        _p += (stride - w) * 4;
+
+        p += (stride - w);
+        _p += (stride - w);
     }
 
     evas_object_image_data_update_add(image, 0, 0, w, h);
@@ -533,78 +514,57 @@ floyd_steinberg_dither()
     int xi;
     unsigned char *x;
 
-    int oldpixel, newpixel;
+    unsigned int oldpixel, newpixel;
     int quant_error;
 
     int factor = 255 / (8 - 1);
     int factor_half = factor >> 1;
 
-    x = c;
-    // convert first line to grayscale
-    for (int i = 0; i < w; i++) {
-        if (!(R_VAL(x) == G_VAL(x) && G_VAL(x) == B_VAL(x))) {
-            xi = Y_VAL(x);
-            CHECK_BOUNDS(xi);
-            G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
-        }
-        x += 4;
-    }
-
     for (int j = 0; j < h; j++) {
-        x = c + (j + 1) * stride * 4;
-
-        // convert next line to grayscale
-        for (int i = 0; j < (h - 1) && i < w; i++) {
-            if (!(R_VAL(x) == G_VAL(x) && G_VAL(x) == B_VAL(x))) {
-                xi = Y_VAL(x);
-                CHECK_BOUNDS(xi);
-                G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
-            }
-            x += 4;
-        }
+        x = c + (j + 1) * stride;
 
         for (int i = 0; i < w; i++) {
-            x = c + j * stride * 4 + i * 4;
+            x = c + j * stride + i;
 
-            oldpixel = 0xff & (int) R_VAL(x);
+            oldpixel = *x;
 
             newpixel = (oldpixel + factor_half) / factor;
             newpixel *= factor;
             CHECK_BOUNDS(newpixel);
-            G_VAL(x) = B_VAL(x) = R_VAL(x) = newpixel;
+            *x = newpixel;
 
             quant_error = oldpixel - newpixel;
 
             if (i < w - 1) {
-                x += 4;
-                xi = R_VAL(x);
+                x++;
+                xi = *x;
                 xi = xi + 7 * quant_error / 16;
                 CHECK_BOUNDS(xi);
-                G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
+                *x = xi;
             }
 
-            x = c + (j + 1) * stride * 4 + (i - 1) * 4;
+            x = c + (j + 1) * stride + (i - 1);
 
             if (j < h - 1) {
                 if (i > 0) {
-                    xi = R_VAL(x);
+                    xi = *x;
                     xi = xi + 3 * quant_error / 16;
                     CHECK_BOUNDS(xi);
-                    G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
+                    *x = xi;
                 }
 
-                x += 4;
-                xi = R_VAL(x);
+                x++;
+                xi = *x;
                 xi = xi + 5 * quant_error / 16;
                 CHECK_BOUNDS(xi);
-                G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
+                *x = xi;
 
                 if (i < w - 1) {
-                    x += 4;
-                    xi = R_VAL(x);
+                    x++;
+                    xi = *x;
                     xi = xi + quant_error / 16;
                     CHECK_BOUNDS(xi);
-                    G_VAL(x) = B_VAL(x) = R_VAL(x) = xi;
+                    *x = xi;
                 }
             }
         }
@@ -744,7 +704,7 @@ main(int argc, char *argv[])
 
     ecore_x_io_error_handler_set(exit_all, NULL);
 
-    ee = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+    ee = ecore_evas_software_x11_8_new(0, 0, 0, 0, 600, 800);
 
     ecore_evas_borderless_set(ee, 0);
     ecore_evas_shaped_set(ee, 0);
