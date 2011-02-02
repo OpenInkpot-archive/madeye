@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=madeye
+_GenericName=Image viewer
+TryExec=madeye
+Exec=madeye %F
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Viewer;Graphics;
+MimeType=image/x-pixmap;image/png;image/jpeg;image/gif;
