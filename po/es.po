@@ -1,37 +1,43 @@
-# madeye
+# SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Alexander Kerner <lunohod@openinkpot.org>, 2009.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: madeye 0.1\n"
-"Report-Msgid-Bugs-To: lunohod@openinkpot.org\n"
-"POT-Creation-Date: 2010-02-23 13:24+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Miguel <ink@canteras.org>\n"
-"Language-Team: \n"
+"Project-Id-Version: OpenInkpot\n"
+"Report-Msgid-Bugs-To: http://openinkpot.org/report/\n"
+"POT-Creation-Date: 2011-02-02 05:24+0300\n"
+"PO-Revision-Date: 2011-02-02 02:50+0000\n"
+"Last-Translator: dottedmag <dottedmag@dottedmag.net>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: src/madeye.c:711
-msgid "Madeye: Help"
-msgstr "Madeye: Ayuda"
-
-#: src/madeye.c:287
-msgid "kB"
-msgstr "kB"
-
-#: src/madeye.c:277
+#: src/madeye.c:273
 #, c-format
 msgid "%dpx x %dpx"
 msgstr "%dpx x %dpx"
 
-#: src/madeye.c:285
+#: src/madeye.c:281
 msgid "MB"
 msgstr "MB"
 
-#: src/madeye.c:293
+#: src/madeye.c:283
+msgid "kB"
+msgstr "kB"
+
+#: src/madeye.c:289
 #, c-format
 msgid "%c"
 msgstr "%c"
+
+#: src/madeye.c:672
+msgid "Madeye: Help"
+msgstr "Madeye: Ayuda"
+
+#: po/madeye.desktop.in.h:1 po/./madeye.desktop.in.h:1
+msgid "Image viewer"
+msgstr ""

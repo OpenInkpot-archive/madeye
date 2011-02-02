@@ -1,0 +1,8 @@
+[oi.madeye]
+file_filter = po/<lang>.po
+source_file = po/madeye.pot
+source_lang = en
+
+[main]
+host = transifex.net
+
