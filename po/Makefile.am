@@ -6,9 +6,10 @@ POFILES = $(wildcard *.po)
 MOFILES = $(patsubst %.po,%.mo,$(POFILES)) 
 
 DESKTOP_INS=$(wildcard $(srcdir)/*.desktop.in)
-DESKTOPS = $(patsubst %,$(srcdir)/%.h, $(DESKTOP_INS))
+DESKTOP_INS_H=$(patsubst %,$(abs_builddir)/%.h, $(DESKTOP_INS))
+DESKTOPS = $(patsubst %.in,$(abs_builddir)/%, $(DESKTOP_INS))
 
-CLEANFILES = $(MOFILES) $(DESKTOPS)
+CLEANFILES = $(MOFILES) $(DESKTOPS) $(DESKTOP_INS_H)
 
 localedir=$(datadir)/locale
 
@@ -31,7 +32,7 @@ install-data-hook: $(MOFILES)
 	 done
 
 desktopdir = $(datarootdir)/applications
-desktop_DATA = $(PACKAGE).desktop
+desktop_DATA = $(DESKTOPS)
 
 %.desktop: %.desktop.in $(POFILES)
 	intltool-merge -d -u $(srcdir) $< $@
@@ -40,18 +41,18 @@ desktop_DATA = $(PACKAGE).desktop
 
 SOURCES = $(shell cd $(top_builddir); find . -name '*.[hc]')
 
-$(PACKAGE).pot:
+$(PACKAGE).pot: $(GENFILES)
 	cd $(top_builddir); xgettext -k_ -kN_ -d $(PACKAGE) \
 		--foreign-user \
 		--package-name="$(PACKAGE)" --package-version="$(VERSION)" \
 		--msgid-bugs-address="$(PACKAGE_BUGREPORT)" \
-		-o $(srcdir)/$@ $(SOURCES)
+		-o $(abs_srcdir)/$@ $(shell cd $(top_builddir); find . -name '*.[hc]')
 
 # .desktop
 
-SOURCES += $(DESKTOPS)
+GENFILES = $(DESKTOP_INS_H)
 
-%.desktop.in.h: %.desktop.in
+$(abs_builddir)/%.desktop.in.h: %.desktop.in
 	intltool-extract --TYPE="gettext/ini" $<
 
 # .tx
