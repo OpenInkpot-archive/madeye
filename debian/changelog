@@ -1,3 +1,9 @@
+madeye (0.1.31) zelazny; urgency=low
+
+  * Add setting for PRS505
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 10 Sep 2011 23:10:04 +0200
+
 madeye (0.1.30) zelazny; urgency=low
 
   * Make madeye work with 8bpp data
