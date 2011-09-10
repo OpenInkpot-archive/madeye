@@ -33,6 +33,9 @@ install: build
 	mkdir -p $(CURDIR)/debian/madeye-settings-n516/etc/keys
 	install -m 0644 $(CURDIR)/data/madeye.n516.ini $(CURDIR)/debian/madeye-settings-n516/etc/keys/madeye.ini
 
+	mkdir -p $(CURDIR)/debian/madeye-settings-prs505/etc/keys
+	install -m 0644 $(CURDIR)/data/madeye.prs505.ini $(CURDIR)/debian/madeye-settings-prs505/etc/keys/madeye.ini
+
 binary-arch: build install
 	dh_testdir
 	dh_testroot

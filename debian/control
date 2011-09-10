@@ -30,3 +30,11 @@ Description: Image viewer for e-Ink devices -- N516 keymapping
  of keys and slow screen refresh.
  .
  This package contains keymapping configuration file for Hanvon N516.
+
+Package: madeye-settings-prs505
+Architecture: all
+Description: Image viewer for e-Ink devices -- PRS505 keymapping
+ madeye is an image viewer designed to be useable on devices with limited amount
+ of keys and slow screen refresh.
+ .
+ This package contains keymapping configuration file for Sony PRS505.
